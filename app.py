@@ -5,7 +5,7 @@ import io
 import re
 import datetime
 from pathlib import Path
-from flask import Flask, render_template, request, jsonify, Response
+from flask import Flask, render_template, request, jsonify, Response, send_file
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
 import anthropic
@@ -918,10 +918,25 @@ def import_prices():
     return jsonify({"added": added})
 
 
+@app.route("/health")
+def health():
+    return jsonify({"status": "ok"})
+
+
 @app.route("/history")
 def history_page():
     histories = AnalysisHistory.query.order_by(AnalysisHistory.id.desc()).limit(100).all()
     return render_template("history.html", histories=histories)
+
+
+@app.route("/api/history/<int:history_id>")
+def get_history(history_id):
+    h = AnalysisHistory.query.get(history_id)
+    if not h:
+        return jsonify({"error": "見つかりません"}), 404
+    d = h.to_dict()
+    d["result_json"] = h.result_json
+    return jsonify(d)
 
 
 @app.route("/api/monday/status", methods=["GET"])

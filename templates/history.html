@@ -5,6 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>精査履歴 - 原状回復 見積精査ツール</title>
   <link rel="stylesheet" href="/static/style.css">
+  <style>
+    .history-row { cursor: pointer; }
+    .history-row:hover td { background: var(--gray-50, #f9fafb); }
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.45); z-index: 100;
+      align-items: flex-start; justify-content: center;
+      padding: 40px 16px; overflow-y: auto;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: #fff; border-radius: 12px; width: 100%; max-width: 760px;
+      padding: 28px 28px 20px; position: relative;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+    }
+    .modal-close {
+      position: absolute; top: 16px; right: 20px;
+      background: none; border: none; font-size: 22px;
+      cursor: pointer; color: var(--gray-400, #9ca3af); line-height: 1;
+    }
+    .modal-close:hover { color: var(--gray-700, #374151); }
+    .modal-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; }
+  </style>
 </head>
 <body>
   <header>
@@ -39,7 +62,7 @@
           </thead>
           <tbody>
             {% for h in histories %}
-            <tr>
+            <tr class="history-row" onclick="openHistory({{ h.id }})" title="クリックで詳細を表示">
               <td style="white-space:nowrap;font-variant-numeric:tabular-nums;">{{ h.analyzed_at[:16] | replace('T', ' ') }}</td>
               <td>{{ h.contractor_name or '—' }}</td>
               <td style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="{{ h.file_names }}">{{ h.file_names or '—' }}</td>
@@ -60,5 +83,108 @@
       {% endif %}
     </div>
   </main>
+
+  <!-- 詳細モーダル -->
+  <div class="modal-overlay" id="historyModal" onclick="closeModal(event)">
+    <div class="modal-box" id="historyModalBox">
+      <button class="modal-close" onclick="closeHistoryModal()">×</button>
+      <div id="historyModalContent"><div class="spinner" style="margin:32px auto;width:32px;height:32px;"></div></div>
+    </div>
+  </div>
+
+  <script>
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+    }
+
+    async function openHistory(id) {
+      const modal = document.getElementById('historyModal');
+      const content = document.getElementById('historyModalContent');
+      content.innerHTML = '<div class="spinner" style="margin:32px auto;width:32px;height:32px;"></div>';
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+
+      try {
+        const res = await fetch(`/api/history/${id}`);
+        const d = await res.json();
+        if (!res.ok) throw new Error(d.error || '不明なエラー');
+        const result = d.result_json ? JSON.parse(d.result_json) : {};
+        content.innerHTML = renderHistoryDetail(d, result);
+      } catch (e) {
+        content.innerHTML = `<p style="color:var(--red)">エラー: ${escapeHtml(e.message)}</p>`;
+      }
+    }
+
+    function renderHistoryDetail(meta, data) {
+      const missing = data.missing_items || [];
+      const over = data.overpriced_items || [];
+      const ok = data.ok_items || [];
+      const dateStr = (meta.analyzed_at || '').replace('T', ' ').slice(0, 16);
+
+      let html = `<div class="modal-title">${escapeHtml(meta.contractor_name || '（業者名不明）')} <span style="font-size:12px;font-weight:400;color:var(--gray-500,#6b7280);">${escapeHtml(dateStr)}</span></div>`;
+      if (meta.file_names) html += `<p style="font-size:12px;color:var(--gray-500,#6b7280);margin-bottom:12px;">${escapeHtml(meta.file_names)}</p>`;
+
+      if (data.summary) {
+        html += `<div class="summary-box">${escapeHtml(data.summary).replace(/\n/g, '<br>')}</div>`;
+      }
+
+      html += `<div class="result-section section-red">
+        <h3>不備・見落とし（${missing.length}件）</h3>`;
+      if (missing.length === 0) {
+        html += '<p class="empty">指摘事項なし</p>';
+      } else {
+        html += missing.map(m => `
+          <div class="result-item">
+            <span class="badge badge-category">${escapeHtml(m.category || '')}</span>
+            <span class="item-name">${escapeHtml(m.item)}</span>
+            <span class="item-reason">${escapeHtml(m.reason || '')}</span>
+            ${m.action ? `<span class="item-action">→ ${escapeHtml(m.action)}</span>` : ''}
+          </div>`).join('');
+      }
+      html += `</div>`;
+
+      html += `<div class="result-section section-orange">
+        <h3>割高な項目（${over.length}件）</h3>`;
+      if (over.length === 0) {
+        html += '<p class="empty">指摘事項なし</p>';
+      } else {
+        html += over.map(o => `
+          <div class="result-item">
+            <span class="item-name">${escapeHtml(o.item)}</span>
+            <span class="price-detail">
+              見積: <strong>${Number(o.estimate_price).toLocaleString()}円/${escapeHtml(o.unit)}</strong>
+              → 基準: ${Number(o.reference_price).toLocaleString()}円
+              <span class="diff-badge">+${Number(o.diff_rate)}%</span>
+              ${o.source ? `<span class="source-badge ${o.source === '相場比' ? 'source-market' : 'source-master'}">${escapeHtml(o.source)}</span>` : ''}
+            </span>
+          </div>`).join('');
+      }
+      html += `</div>`;
+
+      html += `<div class="result-section section-green">
+        <h3>問題なし（${ok.length}件）</h3>`;
+      if (ok.length === 0) {
+        html += '<p class="empty">—</p>';
+      } else {
+        html += `<div class="ok-grid">${ok.map(o => `<span class="ok-chip">${escapeHtml(o.item)}</span>`).join('')}</div>`;
+      }
+      html += `</div>`;
+
+      return html;
+    }
+
+    function closeHistoryModal() {
+      document.getElementById('historyModal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function closeModal(e) {
+      if (e.target === document.getElementById('historyModal')) closeHistoryModal();
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeHistoryModal();
+    });
+  </script>
 </body>
 </html>
