@@ -1,919 +1,2354 @@
 [
   {
-    "id": 1,
     "category": "クロス",
     "item": "クロス貼替（量産品）",
     "unit": "m²",
-    "price": 880
+    "price": 880,
+    "memo": "",
+    "id": 1
   },
   {
-    "id": 2,
     "category": "クロス",
     "item": "クロス貼替（準ハイグレード）",
     "unit": "m²",
-    "price": 1200
+    "price": 1100,
+    "memo": "",
+    "id": 2
   },
   {
-    "id": 3,
     "category": "クロス",
     "item": "クロス貼替（ハイグレード）",
     "unit": "m²",
-    "price": 1500
+    "price": 1400,
+    "memo": "",
+    "id": 3
   },
   {
-    "id": 4,
     "category": "クロス",
-    "item": "クロス下地補修（パテ処理）",
+    "item": "天井クロス貼替（量産品）",
     "unit": "m²",
-    "price": 500
+    "price": 950,
+    "memo": "",
+    "id": 4
   },
   {
-    "id": 5,
-    "category": "床",
-    "item": "CF貼替",
+    "category": "クロス",
+    "item": "天井クロス貼替（準ハイ）",
     "unit": "m²",
-    "price": 2800
+    "price": 1200,
+    "memo": "",
+    "id": 5
   },
   {
-    "id": 6,
-    "category": "床",
-    "item": "フローリング貼替",
+    "category": "クロス",
+    "item": "腰壁クロス貼替",
     "unit": "m²",
-    "price": 8000
+    "price": 1100,
+    "memo": "",
+    "id": 6
   },
   {
-    "id": 7,
-    "category": "床",
+    "category": "クロス",
+    "item": "クロス剥がし（撤去のみ）",
+    "unit": "m²",
+    "price": 200,
+    "memo": "",
+    "id": 7
+  },
+  {
+    "category": "クロス",
+    "item": "下地パテ処理（薄塗り）",
+    "unit": "m²",
+    "price": 300,
+    "memo": "",
+    "id": 8
+  },
+  {
+    "category": "クロス",
+    "item": "下地パテ処理（厚塗り）",
+    "unit": "m²",
+    "price": 500,
+    "memo": "",
+    "id": 9
+  },
+  {
+    "category": "クロス",
+    "item": "石膏ボード補修（小）",
+    "unit": "箇所",
+    "price": 3000,
+    "memo": "",
+    "id": 10
+  },
+  {
+    "category": "クロス",
+    "item": "石膏ボード補修（大）",
+    "unit": "箇所",
+    "price": 8000,
+    "memo": "",
+    "id": 11
+  },
+  {
+    "category": "クロス",
+    "item": "防カビ処理",
+    "unit": "m²",
+    "price": 400,
+    "memo": "",
+    "id": 12
+  },
+  {
+    "category": "クロス",
+    "item": "カビ除去・下地処理",
+    "unit": "箇所",
+    "price": 5000,
+    "memo": "",
+    "id": 13
+  },
+  {
+    "category": "クロス",
+    "item": "シミ止め・シーラー処理",
+    "unit": "箇所",
+    "price": 3500,
+    "memo": "",
+    "id": 14
+  },
+  {
+    "category": "クロス",
+    "item": "最小施工割増（1m²未満）",
+    "unit": "箇所",
+    "price": 2000,
+    "memo": "",
+    "id": 15
+  },
+  {
+    "category": "クロス",
+    "item": "最小施工割増（3m²未満）",
+    "unit": "箇所",
+    "price": 1500,
+    "memo": "",
+    "id": 16
+  },
+  {
+    "category": "クロス",
+    "item": "アクセントクロス貼替",
+    "unit": "m²",
+    "price": 1600,
+    "memo": "",
+    "id": 17
+  },
+  {
+    "category": "クロス",
+    "item": "消臭・抗菌クロス貼替",
+    "unit": "m²",
+    "price": 1200,
+    "memo": "",
+    "id": 18
+  },
+  {
+    "category": "塗装工事",
+    "item": "壁面塗装（2回塗り）",
+    "unit": "m²",
+    "price": 1200,
+    "memo": "",
+    "id": 19
+  },
+  {
+    "category": "塗装工事",
+    "item": "壁面塗装（3回塗り）",
+    "unit": "m²",
+    "price": 1600,
+    "memo": "",
+    "id": 20
+  },
+  {
+    "category": "塗装工事",
+    "item": "天井塗装（2回塗り）",
+    "unit": "m²",
+    "price": 1300,
+    "memo": "",
+    "id": 21
+  },
+  {
+    "category": "塗装工事",
+    "item": "天井塗装（3回塗り）",
+    "unit": "m²",
+    "price": 1700,
+    "memo": "",
+    "id": 22
+  },
+  {
+    "category": "塗装工事",
+    "item": "鉄部塗装（扉枠・窓枠）",
+    "unit": "m²",
+    "price": 1800,
+    "memo": "",
+    "id": 23
+  },
+  {
+    "category": "塗装工事",
+    "item": "鉄部塗装（手摺）",
+    "unit": "m",
+    "price": 2500,
+    "memo": "",
+    "id": 24
+  },
+  {
+    "category": "塗装工事",
+    "item": "鉄扉塗装（片面）",
+    "unit": "枚",
+    "price": 15000,
+    "memo": "",
+    "id": 25
+  },
+  {
+    "category": "塗装工事",
+    "item": "鉄扉塗装（両面）",
+    "unit": "枚",
+    "price": 25000,
+    "memo": "",
+    "id": 26
+  },
+  {
+    "category": "塗装工事",
+    "item": "木部塗装（廻縁・巾木）",
+    "unit": "m",
+    "price": 600,
+    "memo": "",
+    "id": 27
+  },
+  {
+    "category": "塗装工事",
+    "item": "木部塗装（建具枠）",
+    "unit": "箇所",
+    "price": 4000,
+    "memo": "",
+    "id": 28
+  },
+  {
+    "category": "塗装工事",
+    "item": "木部塗装（押入内部）",
+    "unit": "m²",
+    "price": 900,
+    "memo": "",
+    "id": 29
+  },
+  {
+    "category": "塗装工事",
+    "item": "防錆塗装（錆止め1回）",
+    "unit": "m²",
+    "price": 1200,
+    "memo": "",
+    "id": 30
+  },
+  {
+    "category": "塗装工事",
+    "item": "防錆塗装（錆止め2回）",
+    "unit": "m²",
+    "price": 1800,
+    "memo": "",
+    "id": 31
+  },
+  {
+    "category": "塗装工事",
+    "item": "ケレン作業（1種）",
+    "unit": "m²",
+    "price": 1500,
+    "memo": "",
+    "id": 32
+  },
+  {
+    "category": "塗装工事",
+    "item": "ケレン作業（2種）",
+    "unit": "m²",
+    "price": 900,
+    "memo": "",
+    "id": 33
+  },
+  {
+    "category": "塗装工事",
+    "item": "ケレン作業（3種）",
+    "unit": "m²",
+    "price": 500,
+    "memo": "",
+    "id": 34
+  },
+  {
+    "category": "塗装工事",
+    "item": "シーラー塗布（下地処理）",
+    "unit": "m²",
+    "price": 400,
+    "memo": "",
+    "id": 35
+  },
+  {
+    "category": "塗装工事",
+    "item": "吹付塗装（リシン）",
+    "unit": "m²",
+    "price": 1800,
+    "memo": "",
+    "id": 36
+  },
+  {
+    "category": "塗装工事",
+    "item": "吹付塗装（スタッコ）",
+    "unit": "m²",
+    "price": 2200,
+    "memo": "",
+    "id": 37
+  },
+  {
+    "category": "塗装工事",
+    "item": "ローラー塗装（仕上げ）",
+    "unit": "m²",
+    "price": 1100,
+    "memo": "",
+    "id": 38
+  },
+  {
+    "category": "床材",
+    "item": "CF貼替（普及品）",
+    "unit": "m²",
+    "price": 2500,
+    "memo": "",
+    "id": 39
+  },
+  {
+    "category": "床材",
+    "item": "CF貼替（中級品）",
+    "unit": "m²",
+    "price": 3200,
+    "memo": "",
+    "id": 40
+  },
+  {
+    "category": "床材",
+    "item": "CF貼替（長尺シート）",
+    "unit": "m²",
+    "price": 3800,
+    "memo": "",
+    "id": 41
+  },
+  {
+    "category": "床材",
+    "item": "CF撤去処分",
+    "unit": "m²",
+    "price": 600,
+    "memo": "",
+    "id": 42
+  },
+  {
+    "category": "床材",
+    "item": "フローリング上貼り（普及品）",
+    "unit": "m²",
+    "price": 5500,
+    "memo": "",
+    "id": 43
+  },
+  {
+    "category": "床材",
+    "item": "フローリング上貼り（中級品）",
+    "unit": "m²",
+    "price": 7000,
+    "memo": "",
+    "id": 44
+  },
+  {
+    "category": "床材",
+    "item": "フローリング張替え（普及品）",
+    "unit": "m²",
+    "price": 8000,
+    "memo": "",
+    "id": 45
+  },
+  {
+    "category": "床材",
+    "item": "フローリング張替え（中級品）",
+    "unit": "m²",
+    "price": 10000,
+    "memo": "",
+    "id": 46
+  },
+  {
+    "category": "床材",
+    "item": "防音フローリング上貼り",
+    "unit": "m²",
+    "price": 9000,
+    "memo": "",
+    "id": 47
+  },
+  {
+    "category": "床材",
+    "item": "防音フローリング張替え",
+    "unit": "m²",
+    "price": 12000,
+    "memo": "",
+    "id": 48
+  },
+  {
+    "category": "床材",
+    "item": "フロアタイル貼替",
+    "unit": "m²",
+    "price": 4500,
+    "memo": "",
+    "id": 49
+  },
+  {
+    "category": "床材",
+    "item": "玄関タイル貼替",
+    "unit": "m²",
+    "price": 8500,
+    "memo": "",
+    "id": 50
+  },
+  {
+    "category": "床材",
+    "item": "浴室床タイル補修",
+    "unit": "箇所",
+    "price": 15000,
+    "memo": "",
+    "id": 51
+  },
+  {
+    "category": "床材",
+    "item": "畳表替え",
+    "unit": "枚",
+    "price": 5000,
+    "memo": "",
+    "id": 52
+  },
+  {
+    "category": "床材",
+    "item": "畳裏返し",
+    "unit": "枚",
+    "price": 2500,
+    "memo": "",
+    "id": 53
+  },
+  {
+    "category": "床材",
+    "item": "畳入替（新調）",
+    "unit": "枚",
+    "price": 12000,
+    "memo": "",
+    "id": 54
+  },
+  {
+    "category": "床材",
+    "item": "カーペット貼替",
+    "unit": "m²",
+    "price": 3500,
+    "memo": "",
+    "id": 55
+  },
+  {
+    "category": "床材",
+    "item": "カーペット撤去処分",
+    "unit": "m²",
+    "price": 700,
+    "memo": "",
+    "id": 56
+  },
+  {
+    "category": "床材",
     "item": "床鳴り補修",
     "unit": "箇所",
-    "price": 5000
+    "price": 8000,
+    "memo": "",
+    "id": 57
   },
   {
-    "id": 8,
+    "category": "床材",
+    "item": "床下地補修",
+    "unit": "m²",
+    "price": 6000,
+    "memo": "",
+    "id": 58
+  },
+  {
+    "category": "床材",
+    "item": "段差解消スロープ取付",
+    "unit": "箇所",
+    "price": 5000,
+    "memo": "",
+    "id": 59
+  },
+  {
+    "category": "床材",
+    "item": "敷居調整・交換",
+    "unit": "箇所",
+    "price": 8000,
+    "memo": "",
+    "id": 60
+  },
+  {
+    "category": "床材",
+    "item": "ウッドデッキ補修",
+    "unit": "式",
+    "price": 30000,
+    "memo": "",
+    "id": 61
+  },
+  {
     "category": "建具",
-    "item": "襖貼替",
+    "item": "室内ドア交換（片開き）",
     "unit": "枚",
-    "price": 1500
+    "price": 65000,
+    "memo": "",
+    "id": 62
   },
   {
-    "id": 9,
+    "category": "建具",
+    "item": "室内ドア交換（親子扉）",
+    "unit": "枚",
+    "price": 95000,
+    "memo": "",
+    "id": 63
+  },
+  {
+    "category": "建具",
+    "item": "引き戸交換（片引き）",
+    "unit": "枚",
+    "price": 70000,
+    "memo": "",
+    "id": 64
+  },
+  {
+    "category": "建具",
+    "item": "引き込み戸交換",
+    "unit": "枚",
+    "price": 85000,
+    "memo": "",
+    "id": 65
+  },
+  {
+    "category": "建具",
+    "item": "引き違い戸交換",
+    "unit": "セット",
+    "price": 90000,
+    "memo": "",
+    "id": 66
+  },
+  {
+    "category": "建具",
+    "item": "折れ戸交換（クローゼット）",
+    "unit": "枚",
+    "price": 55000,
+    "memo": "",
+    "id": 67
+  },
+  {
+    "category": "建具",
+    "item": "クローゼット扉交換（2枚折れ）",
+    "unit": "セット",
+    "price": 75000,
+    "memo": "",
+    "id": 68
+  },
+  {
+    "category": "建具",
+    "item": "押入れ扉交換（引き違い）",
+    "unit": "セット",
+    "price": 60000,
+    "memo": "",
+    "id": 69
+  },
+  {
+    "category": "建具",
+    "item": "襖貼替（片面）",
+    "unit": "枚",
+    "price": 8000,
+    "memo": "",
+    "id": 70
+  },
+  {
+    "category": "建具",
+    "item": "襖交換（新調）",
+    "unit": "枚",
+    "price": 25000,
+    "memo": "",
+    "id": 71
+  },
+  {
     "category": "建具",
     "item": "障子貼替",
     "unit": "枚",
-    "price": 4000
+    "price": 6000,
+    "memo": "",
+    "id": 72
   },
   {
-    "id": 10,
-    "category": "設備",
-    "item": "エアコン設置（新品6畳用）",
-    "unit": "台",
-    "price": 72000
-  },
-  {
-    "id": 11,
-    "category": "設備",
-    "item": "エアコン撤去処分",
-    "unit": "台",
-    "price": 8000
-  },
-  {
-    "id": 12,
-    "category": "設備工事",
-    "item": "温水洗浄便座 設置（本体込み）",
-    "unit": "台",
-    "price": 35000
-  },
-  {
-    "id": 13,
-    "category": "設備",
-    "item": "モニターホン設置",
-    "unit": "台",
-    "price": 15000
-  },
-  {
-    "id": 14,
-    "category": "設備",
-    "item": "火災報知器設置",
-    "unit": "個",
-    "price": 2500
-  },
-  {
-    "id": 15,
-    "category": "設備",
-    "item": "シーリングライト設置（LED）",
-    "unit": "台",
-    "price": 6500
-  },
-  {
-    "id": 16,
-    "category": "水回り",
-    "item": "水栓交換（単水栓）",
-    "unit": "箇所",
-    "price": 15000
-  },
-  {
-    "id": 17,
-    "category": "水回り",
-    "item": "水栓交換（混合水栓）",
-    "unit": "箇所",
-    "price": 25000
-  },
-  {
-    "id": 18,
-    "category": "水回り",
-    "item": "排水トラップ交換",
-    "unit": "箇所",
-    "price": 8000
-  },
-  {
-    "id": 19,
-    "category": "水回り",
-    "item": "コーキング打ち替え（浴室）",
-    "unit": "m",
-    "price": 1500
-  },
-  {
-    "id": 20,
-    "category": "水回り",
-    "item": "コーキング打ち替え（キッチン）",
-    "unit": "m",
-    "price": 1200
-  },
-  {
-    "id": 21,
-    "category": "クリーニング",
-    "item": "ハウスクリーニング（1K・1R）",
-    "unit": "式",
-    "price": 30000
-  },
-  {
-    "id": 22,
-    "category": "クリーニング",
-    "item": "ハウスクリーニング（1LDK・2K）",
-    "unit": "式",
-    "price": 40000
-  },
-  {
-    "id": 23,
-    "category": "クリーニング",
-    "item": "ハウスクリーニング（2LDK・3K）",
-    "unit": "式",
-    "price": 46000
-  },
-  {
-    "id": 24,
-    "category": "クリーニング",
-    "item": "エアコンクリーニング",
-    "unit": "台",
-    "price": 12000
-  },
-  {
-    "id": 25,
-    "category": "その他",
-    "item": "不用品撤去・処分",
-    "unit": "式",
-    "price": 20000
-  },
-  {
-    "id": 26,
-    "category": "その他",
-    "item": "鍵交換",
-    "unit": "箇所",
-    "price": 15000
-  },
-  {
-    "id": 27,
     "category": "建具",
-    "item": "玄関框見切り取り",
-    "unit": "式",
-    "price": 1500
-  },
-  {
-    "id": 28,
-    "category": "建具",
-    "item": "玄関ドアポスト設置",
-    "unit": "式",
-    "price": 8000
-  },
-  {
-    "id": 29,
-    "category": "その他",
-    "item": "換気扇フードカバー表塗装",
-    "unit": "式",
-    "price": 5000
-  },
-  {
-    "id": 30,
-    "category": "建具",
-    "item": "キッチン引手・扉シール剥がし",
-    "unit": "式",
-    "price": 5000
-  },
-  {
-    "id": 31,
-    "category": "建具",
-    "item": "キッチン扉吊戸棚シート張り",
-    "unit": "式",
-    "price": 25000
-  },
-  {
-    "id": 32,
-    "category": "建具",
-    "item": "キッチン扉建付け調整",
-    "unit": "式",
-    "price": 3000
-  },
-  {
-    "id": 33,
-    "category": "建具",
-    "item": "玄関下駄箱下面材剥がれ補修",
-    "unit": "式",
-    "price": 2000
-  },
-  {
-    "id": 34,
-    "category": "その他",
-    "item": "キッチン窓枠塗装",
+    "item": "障子交換（新調）",
     "unit": "枚",
-    "price": 8000
+    "price": 22000,
+    "memo": "",
+    "id": 73
   },
   {
-    "id": 35,
     "category": "建具",
-    "item": "キッチン扉隙間パッキン交換",
-    "unit": "式",
-    "price": 5000
-  },
-  {
-    "id": 36,
-    "category": "建具",
-    "item": "トイレ扉剥がれ補修・塗装",
-    "unit": "式",
-    "price": 8000
-  },
-  {
-    "id": 37,
-    "category": "水回り",
-    "item": "洗濯機水栓ニップル取り付け",
-    "unit": "式",
-    "price": 1500
-  },
-  {
-    "id": 39,
-    "category": "その他",
-    "item": "浴室壁キズ補修",
-    "unit": "式",
-    "price": 3000
-  },
-  {
-    "id": 40,
-    "category": "その他",
-    "item": "屋根裏本撤去処分",
-    "unit": "式",
-    "price": 1000
-  },
-  {
-    "id": 41,
-    "category": "その他",
-    "item": "残置物鏡撤去処分",
-    "unit": "式",
-    "price": 1000
-  },
-  {
-    "id": 42,
-    "category": "建具",
-    "item": "建具キズ補修・タッチアップ",
-    "unit": "式",
-    "price": 3000
-  },
-  {
-    "id": 43,
-    "category": "床",
-    "item": "畳処分",
+    "item": "玄関ドア交換（カバー工法）",
     "unit": "枚",
-    "price": 5000
+    "price": 250000,
+    "memo": "",
+    "id": 74
   },
   {
-    "id": 44,
-    "category": "その他",
-    "item": "和洋変更",
-    "unit": "式",
-    "price": 75000
-  },
-  {
-    "id": 45,
-    "category": "その他",
-    "item": "和室天井下地処理",
-    "unit": "式",
-    "price": 8000
-  },
-  {
-    "id": 46,
-    "category": "クリーニング",
-    "item": "クロス洗い",
-    "unit": "式",
-    "price": 3000
-  },
-  {
-    "id": 48,
-    "category": "その他",
-    "item": "空気口取り付け",
-    "unit": "式",
-    "price": 2000
-  },
-  {
-    "id": 49,
     "category": "建具",
-    "item": "網戸建付け調整",
-    "unit": "式",
-    "price": 2000
+    "item": "玄関ドア錠前交換",
+    "unit": "箇所",
+    "price": 25000,
+    "memo": "",
+    "id": 75
   },
   {
-    "id": 50,
-    "category": "その他",
-    "item": "ガスコンロ撤去処分",
-    "unit": "式",
-    "price": 3000
+    "category": "建具",
+    "item": "室内ドアノブ交換",
+    "unit": "箇所",
+    "price": 8000,
+    "memo": "",
+    "id": 76
   },
   {
-    "id": 51,
-    "category": "その他",
-    "item": "駐車場代",
-    "unit": "式",
-    "price": 6500
+    "category": "建具",
+    "item": "丁番交換",
+    "unit": "箇所",
+    "price": 3000,
+    "memo": "",
+    "id": 77
   },
   {
-    "id": 52,
-    "category": "その他",
-    "item": "交通費",
-    "unit": "式",
-    "price": 4000
+    "category": "建具",
+    "item": "戸当り取付・交換",
+    "unit": "箇所",
+    "price": 2000,
+    "memo": "",
+    "id": 78
   },
   {
-    "id": 53,
-    "category": "その他",
-    "item": "キッチン包丁差し交換",
-    "unit": "式",
-    "price": 3000
+    "category": "建具",
+    "item": "ドアストッパー取付",
+    "unit": "箇所",
+    "price": 3000,
+    "memo": "",
+    "id": 79
   },
   {
-    "id": 54,
-    "category": "その他",
-    "item": "風呂蓋処分",
-    "unit": "式",
-    "price": 1000
+    "category": "建具",
+    "item": "ドア枠補修・塗装",
+    "unit": "箇所",
+    "price": 15000,
+    "memo": "",
+    "id": 80
   },
   {
-    "id": 55,
-    "category": "水回り",
-    "item": "洗濯パン交換（洗濯パン・トラップ）",
-    "unit": "式",
-    "price": 30000
+    "category": "建具",
+    "item": "ドア枠交換",
+    "unit": "箇所",
+    "price": 35000,
+    "memo": "",
+    "id": 81
   },
   {
-    "id": 56,
-    "category": "解体工事",
-    "item": "住設機器解体工事",
-    "unit": "式",
-    "price": 25000
+    "category": "建具",
+    "item": "建具調整（建付け直し）",
+    "unit": "箇所",
+    "price": 5000,
+    "memo": "",
+    "id": 82
   },
   {
-    "id": 57,
-    "category": "解体工事",
-    "item": "間仕切り壁解体",
-    "unit": "式",
-    "price": 15000
+    "category": "建具",
+    "item": "引き戸レール・戸車交換",
+    "unit": "箇所",
+    "price": 8000,
+    "memo": "",
+    "id": 83
   },
   {
-    "id": 58,
-    "category": "解体工事",
-    "item": "解体材・混載処分費",
-    "unit": "㎥",
-    "price": 19000
+    "category": "建具",
+    "item": "鍵交換（シリンダー）",
+    "unit": "箇所",
+    "price": 15000,
+    "memo": "",
+    "id": 84
   },
   {
-    "id": 59,
-    "category": "解体工事",
-    "item": "解体材搬出費",
-    "unit": "式",
-    "price": 5000
-  },
-  {
-    "id": 60,
-    "category": "大工工事",
-    "item": "キッチン間仕切り解体箇所補修工事",
-    "unit": "式",
-    "price": 25000
-  },
-  {
-    "id": 61,
-    "category": "大工工事",
-    "item": "根太下地組み",
-    "unit": "式",
-    "price": 25000
-  },
-  {
-    "id": 62,
-    "category": "大工工事",
-    "item": "コンパネ捨て貼り工事",
-    "unit": "式",
-    "price": 25000
-  },
-  {
-    "id": 63,
-    "category": "大工工事",
-    "item": "収納底板貼り",
-    "unit": "式",
-    "price": 5000
-  },
-  {
-    "id": 67,
-    "category": "大工工事",
-    "item": "使用材木費",
-    "unit": "式",
-    "price": 86000
-  },
-  {
-    "id": 68,
-    "category": "キッチン工事",
-    "item": "キッチン一式（クリンプレティ）",
-    "unit": "式",
-    "price": 61830
-  },
-  {
-    "id": 69,
-    "category": "キッチン工事",
-    "item": "ビルトインガスコンロ（リンナイ）",
-    "unit": "セット",
-    "price": 44000
-  },
-  {
-    "id": 70,
-    "category": "キッチン工事",
-    "item": "レンジフード本体（クリナップ）",
-    "unit": "台",
-    "price": 35700
-  },
-  {
-    "id": 71,
-    "category": "キッチン工事",
-    "item": "キッチンパネル3*8 セラール",
+    "category": "サッシ・窓",
+    "item": "窓ガラス交換（小・〜0.5m²）",
     "unit": "枚",
-    "price": 12580
+    "price": 15000,
+    "memo": "",
+    "id": 85
   },
   {
-    "id": 72,
-    "category": "キッチン工事",
-    "item": "エンドジョイナー部材",
+    "category": "サッシ・窓",
+    "item": "窓ガラス交換（中・〜1.0m²）",
+    "unit": "枚",
+    "price": 25000,
+    "memo": "",
+    "id": 86
+  },
+  {
+    "category": "サッシ・窓",
+    "item": "窓ガラス交換（大・1.0m²〜）",
+    "unit": "枚",
+    "price": 40000,
+    "memo": "",
+    "id": 87
+  },
+  {
+    "category": "サッシ・窓",
+    "item": "複層ガラス交換（中）",
+    "unit": "枚",
+    "price": 45000,
+    "memo": "",
+    "id": 88
+  },
+  {
+    "category": "サッシ・窓",
+    "item": "複層ガラス交換（大）",
+    "unit": "枚",
+    "price": 70000,
+    "memo": "",
+    "id": 89
+  },
+  {
+    "category": "サッシ・窓",
+    "item": "網戸張替え（小・〜0.5m²）",
+    "unit": "枚",
+    "price": 4000,
+    "memo": "",
+    "id": 90
+  },
+  {
+    "category": "サッシ・窓",
+    "item": "網戸張替え（中・〜1.0m²）",
+    "unit": "枚",
+    "price": 6000,
+    "memo": "",
+    "id": 91
+  },
+  {
+    "category": "サッシ・窓",
+    "item": "網戸張替え（大・1.0m²〜）",
+    "unit": "枚",
+    "price": 9000,
+    "memo": "",
+    "id": 92
+  },
+  {
+    "category": "サッシ・窓",
+    "item": "網戸交換（新調）",
+    "unit": "枚",
+    "price": 18000,
+    "memo": "",
+    "id": 93
+  },
+  {
+    "category": "サッシ・窓",
+    "item": "内窓取付（二重窓・小）",
+    "unit": "箇所",
+    "price": 55000,
+    "memo": "",
+    "id": 94
+  },
+  {
+    "category": "サッシ・窓",
+    "item": "内窓取付（二重窓・中）",
+    "unit": "箇所",
+    "price": 75000,
+    "memo": "",
+    "id": 95
+  },
+  {
+    "category": "サッシ・窓",
+    "item": "内窓取付（二重窓・大）",
+    "unit": "箇所",
+    "price": 100000,
+    "memo": "",
+    "id": 96
+  },
+  {
+    "category": "サッシ・窓",
+    "item": "窓サッシ交換（カバー工法）",
+    "unit": "箇所",
+    "price": 120000,
+    "memo": "",
+    "id": 97
+  },
+  {
+    "category": "サッシ・窓",
+    "item": "窓枠補修・コーキング打替",
+    "unit": "箇所",
+    "price": 8000,
+    "memo": "",
+    "id": 98
+  },
+  {
+    "category": "サッシ・窓",
+    "item": "窓枠塗装",
+    "unit": "箇所",
+    "price": 12000,
+    "memo": "",
+    "id": 99
+  },
+  {
+    "category": "サッシ・窓",
+    "item": "面格子取付（既製品）",
+    "unit": "箇所",
+    "price": 20000,
+    "memo": "",
+    "id": 100
+  },
+  {
+    "category": "サッシ・窓",
+    "item": "面格子取付（オーダー）",
+    "unit": "箇所",
+    "price": 45000,
+    "memo": "",
+    "id": 101
+  },
+  {
+    "category": "サッシ・窓",
+    "item": "カーテンレール交換（シングル）",
     "unit": "本",
-    "price": 1500
+    "price": 6000,
+    "memo": "",
+    "id": 102
   },
   {
-    "id": 73,
-    "category": "キッチン工事",
-    "item": "副資材費",
+    "category": "サッシ・窓",
+    "item": "カーテンレール交換（ダブル）",
+    "unit": "本",
+    "price": 10000,
+    "memo": "",
+    "id": 103
+  },
+  {
+    "category": "サッシ・窓",
+    "item": "ロールスクリーン取付",
+    "unit": "箇所",
+    "price": 18000,
+    "memo": "",
+    "id": 104
+  },
+  {
+    "category": "サッシ・窓",
+    "item": "ブラインド取付",
+    "unit": "箇所",
+    "price": 20000,
+    "memo": "",
+    "id": 105
+  },
+  {
+    "category": "サッシ・窓",
+    "item": "サッシ錠・クレセント交換",
+    "unit": "箇所",
+    "price": 5000,
+    "memo": "",
+    "id": 106
+  },
+  {
+    "category": "サッシ・窓",
+    "item": "サッシ戸車交換",
+    "unit": "箇所",
+    "price": 6000,
+    "memo": "",
+    "id": 107
+  },
+  {
+    "category": "浴室",
+    "item": "ユニットバス交換（1014）",
     "unit": "式",
-    "price": 7000
+    "price": 380000,
+    "memo": "",
+    "id": 108
   },
   {
-    "id": 74,
-    "category": "キッチン工事",
-    "item": "キッチンパネル貼り工事",
+    "category": "浴室",
+    "item": "ユニットバス交換（1216）",
     "unit": "式",
-    "price": 15000
+    "price": 450000,
+    "memo": "",
+    "id": 109
   },
   {
-    "id": 75,
-    "category": "キッチン工事",
-    "item": "キッチン取付工事",
+    "category": "浴室",
+    "item": "ユニットバス交換（1317）",
     "unit": "式",
-    "price": 35000
+    "price": 520000,
+    "memo": "",
+    "id": 110
   },
   {
-    "id": 76,
-    "category": "キッチン工事",
-    "item": "ライニング製作",
+    "category": "浴室",
+    "item": "ユニットバス交換（1418）",
     "unit": "式",
-    "price": 20000
+    "price": 600000,
+    "memo": "",
+    "id": 111
   },
   {
-    "id": 77,
-    "category": "キッチン工事",
-    "item": "配管・継ぎ手材",
+    "category": "浴室",
+    "item": "ユニットバス交換（1620）",
     "unit": "式",
-    "price": 10000
+    "price": 700000,
+    "memo": "",
+    "id": 112
   },
   {
-    "id": 78,
-    "category": "キッチン工事",
-    "item": "施工後コーキング処理",
+    "category": "浴室",
+    "item": "浴槽交換（FRP）",
     "unit": "式",
-    "price": 5000
+    "price": 120000,
+    "memo": "",
+    "id": 113
   },
   {
-    "id": 79,
-    "category": "キッチン工事",
-    "item": "レンジフード取付工事費",
+    "category": "浴室",
+    "item": "浴槽交換（人工大理石）",
     "unit": "式",
-    "price": 15000
+    "price": 180000,
+    "memo": "",
+    "id": 114
   },
   {
-    "id": 80,
-    "category": "キッチン工事",
-    "item": "手元灯交換",
+    "category": "浴室",
+    "item": "浴槽補修（コーティング）",
     "unit": "式",
-    "price": 7000
+    "price": 35000,
+    "memo": "",
+    "id": 115
   },
   {
-    "id": 81,
-    "category": "キッチン工事",
-    "item": "ビルトインコンロ設置工事",
-    "unit": "式",
-    "price": 8000
+    "category": "浴室",
+    "item": "シャワーヘッド交換",
+    "unit": "箇所",
+    "price": 8000,
+    "memo": "",
+    "id": 116
   },
   {
-    "id": 82,
-    "category": "キッチン工事",
-    "item": "ガス配管延長・ビルトインコンロ接続費",
-    "unit": "式",
-    "price": 25000
+    "category": "浴室",
+    "item": "サーモスタット水栓交換",
+    "unit": "箇所",
+    "price": 35000,
+    "memo": "",
+    "id": 117
   },
   {
-    "id": 83,
-    "category": "設備工事",
-    "item": "水栓交換（施工費）",
-    "unit": "式",
-    "price": 25000
+    "category": "浴室",
+    "item": "単水栓交換（シャワー用）",
+    "unit": "箇所",
+    "price": 25000,
+    "memo": "",
+    "id": 118
   },
   {
-    "id": 84,
-    "category": "設備工事",
-    "item": "キッチン2ホールシングルレバー水栓",
-    "unit": "セット",
-    "price": 15120
-  },
-  {
-    "id": 85,
-    "category": "設備工事",
-    "item": "UB壁付けサーモ水栓",
+    "category": "浴室",
+    "item": "浴室換気扇交換",
     "unit": "台",
-    "price": 18720
+    "price": 30000,
+    "memo": "",
+    "id": 119
   },
   {
-    "id": 86,
-    "category": "設備工事",
-    "item": "泡止めパイプ・エルボ補充",
-    "unit": "式",
-    "price": 1500
-  },
-  {
-    "id": 87,
-    "category": "設備工事",
-    "item": "温水洗浄便座 本体",
-    "unit": "式",
-    "price": 16560
-  },
-  {
-    "id": 88,
-    "category": "設備工事",
-    "item": "温水洗浄便座 交換工事費",
-    "unit": "式",
-    "price": 5000
-  },
-  {
-    "id": 89,
-    "category": "設備工事",
-    "item": "内部金物交換",
-    "unit": "式",
-    "price": 7000
-  },
-  {
-    "id": 90,
-    "category": "電気工事",
-    "item": "コスモワイド交換",
-    "unit": "式",
-    "price": 40000
-  },
-  {
-    "id": 91,
-    "category": "電気工事",
-    "item": "ローゼット交換",
-    "unit": "箇所",
-    "price": 2500
-  },
-  {
-    "id": 92,
-    "category": "電気工事",
-    "item": "ダウンライト交換150Φ",
-    "unit": "箇所",
-    "price": 5000
-  },
-  {
-    "id": 93,
-    "category": "電気工事",
-    "item": "換気扇交換",
-    "unit": "箇所",
-    "price": 8000
-  },
-  {
-    "id": 94,
-    "category": "電気工事",
-    "item": "間仕切り撤去に伴う配線逃",
-    "unit": "式",
-    "price": 18000
-  },
-  {
-    "id": 95,
-    "category": "電気工事",
-    "item": "換気扇本体",
-    "unit": "式",
-    "price": 9680
-  },
-  {
-    "id": 97,
-    "category": "電気工事",
-    "item": "玄関薄型シーリングライト交換",
-    "unit": "箇所",
-    "price": 3500
-  },
-  {
-    "id": 98,
-    "category": "エアコン工事",
-    "item": "エアコン本体 2.5kw",
+    "category": "浴室",
+    "item": "浴室換気乾燥機交換",
     "unit": "台",
-    "price": 49200
+    "price": 80000,
+    "memo": "",
+    "id": 120
   },
   {
-    "id": 99,
-    "category": "エアコン工事",
-    "item": "エアコン交換工事",
-    "unit": "式",
-    "price": 25000
+    "category": "浴室",
+    "item": "浴室タイル補修（部分）",
+    "unit": "箇所",
+    "price": 15000,
+    "memo": "",
+    "id": 121
   },
   {
-    "id": 100,
-    "category": "塗装工事",
-    "item": "廻り縁・巾木・窓枠・鉄枠塗装工事",
-    "unit": "式",
-    "price": 35000
+    "category": "浴室",
+    "item": "浴室タイル貼替（床）",
+    "unit": "m²",
+    "price": 18000,
+    "memo": "",
+    "id": 122
   },
   {
-    "id": 101,
-    "category": "塗装工事",
-    "item": "玄関ドア内面塗装工事",
-    "unit": "式",
-    "price": 10000
+    "category": "浴室",
+    "item": "浴室タイル貼替（壁）",
+    "unit": "m²",
+    "price": 16000,
+    "memo": "",
+    "id": 123
   },
   {
-    "id": 102,
-    "category": "塗装工事",
-    "item": "下地ケレン調整費",
-    "unit": "式",
-    "price": 5000
-  },
-  {
-    "id": 103,
-    "category": "塗装工事",
-    "item": "養生費",
-    "unit": "式",
-    "price": 5000
-  },
-  {
-    "id": 104,
-    "category": "表具工事",
-    "item": "網戸貼替：大",
-    "unit": "面",
-    "price": 3500
-  },
-  {
-    "id": 105,
-    "category": "表具工事",
-    "item": "ガラス交換網菱曇り800*800",
+    "category": "浴室",
+    "item": "浴室鏡交換",
     "unit": "枚",
-    "price": 28800
+    "price": 20000,
+    "memo": "",
+    "id": 124
   },
   {
-    "id": 106,
-    "category": "内装工事",
-    "item": "ソフト巾木貼り",
-    "unit": "枚",
-    "price": 550
-  },
-  {
-    "id": 107,
-    "category": "雑工事",
-    "item": "カーテンレール交換",
+    "category": "浴室",
+    "item": "浴室棚交換",
     "unit": "箇所",
-    "price": 2200
+    "price": 12000,
+    "memo": "",
+    "id": 125
   },
   {
-    "id": 108,
-    "category": "雑工事",
-    "item": "換気口交換",
-    "unit": "箇所",
-    "price": 1500
-  },
-  {
-    "id": 109,
-    "category": "雑工事",
-    "item": "UBシール打ち",
+    "category": "浴室",
+    "item": "防水補修（在来浴室）",
     "unit": "式",
-    "price": 5000
+    "price": 80000,
+    "memo": "",
+    "id": 126
   },
   {
-    "id": 110,
-    "category": "雑工事",
-    "item": "ペーパーホルダー交換",
-    "unit": "式",
-    "price": 1200
-  },
-  {
-    "id": 111,
-    "category": "雑工事",
-    "item": "ドアクローザー交換",
-    "unit": "式",
-    "price": 10500
-  },
-  {
-    "id": 112,
-    "category": "美装工事",
-    "item": "鏡ウロコ落とし",
-    "unit": "式",
-    "price": 2000
-  },
-  {
-    "id": 113,
-    "category": "木工事",
-    "item": "障子鴨居ベニヤ張り",
-    "unit": "式",
-    "price": 10000
-  },
-  {
-    "id": 115,
-    "category": "木工事",
-    "item": "床板貼替（床鳴り補修）",
-    "unit": "式",
-    "price": 25000
-  },
-  {
-    "id": 116,
-    "category": "木工事",
-    "item": "配管回り下地組替",
-    "unit": "式",
-    "price": 15000
-  },
-  {
-    "id": 117,
-    "category": "木工事",
-    "item": "床鳴り補修（ビス締め）",
-    "unit": "式",
-    "price": 10000
-  },
-  {
-    "id": 118,
-    "category": "木工事",
-    "item": "下足入れ本体",
-    "unit": "セット",
-    "price": 29830
-  },
-  {
-    "id": 119,
-    "category": "木工事",
-    "item": "下足入れ設置工事",
-    "unit": "式",
-    "price": 15000
-  },
-  {
-    "id": 120,
-    "category": "木工事",
-    "item": "浴室壁パネル張り（腐食箇所）",
-    "unit": "材工",
-    "price": 18000
-  },
-  {
-    "id": 121,
-    "category": "設備工事",
-    "item": "排水管ナットパッキン交換",
-    "unit": "式",
-    "price": 5000
-  },
-  {
-    "id": 122,
-    "category": "設備工事",
-    "item": "防水パン本体 PWP800N2W",
-    "unit": "セット",
-    "price": 6300
-  },
-  {
-    "id": 123,
-    "category": "設備工事",
-    "item": "防水トラップ PJ2008NW",
-    "unit": "セット",
-    "price": 2450
-  },
-  {
-    "id": 124,
-    "category": "設備工事",
-    "item": "防水パン交換・結び工事",
-    "unit": "式",
-    "price": 10000
-  },
-  {
-    "id": 125,
-    "category": "設備工事",
-    "item": "洗面化粧台本体 TOTO Vシリーズ",
-    "unit": "セット",
-    "price": 43470
-  },
-  {
-    "id": 126,
-    "category": "設備工事",
-    "item": "洗面化粧台交換工事費",
-    "unit": "式",
-    "price": 30000
-  },
-  {
-    "id": 127,
-    "category": "電気工事",
-    "item": "簡易照明器具取付",
-    "unit": "箇所",
-    "price": 1500
-  },
-  {
-    "id": 128,
-    "category": "電気工事",
-    "item": "AC用新規電源増設",
-    "unit": "系統",
-    "price": 18000
-  },
-  {
-    "id": 129,
-    "category": "電気工事",
-    "item": "AC配管用躯体コア抜き",
-    "unit": "式",
-    "price": 30000
-  },
-  {
-    "id": 130,
-    "category": "電気工事",
-    "item": "UB照明器具交換",
-    "unit": "材工",
-    "price": 3900
-  },
-  {
-    "id": 131,
-    "category": "電気工事",
-    "item": "玄関AC用増設ブレーカー取付",
-    "unit": "材工",
-    "price": 35000
-  },
-  {
-    "id": 132,
-    "category": "塗装工事",
-    "item": "キッチン底板塗装",
-    "unit": "式",
-    "price": 10000
-  },
-  {
-    "id": 133,
-    "category": "表具工事",
-    "item": "間仕切り襖貼替（両面）",
-    "unit": "面",
-    "price": 3000
-  },
-  {
-    "id": 134,
-    "category": "表具工事",
-    "item": "押入襖貼替（大）",
-    "unit": "面",
-    "price": 3000
-  },
-  {
-    "id": 136,
-    "category": "内装工事",
-    "item": "シート張り（トイレ扉両面・キッチン扉表）",
+    "category": "浴室",
+    "item": "目地補修・コーキング打替",
     "unit": "m",
-    "price": 2800
+    "price": 2000,
+    "memo": "",
+    "id": 127
   },
   {
-    "id": 137,
-    "category": "内装工事",
-    "item": "シート張り工事",
+    "category": "浴室",
+    "item": "浴室ドア交換（折戸）",
     "unit": "式",
-    "price": 25000
+    "price": 55000,
+    "memo": "",
+    "id": 128
   },
   {
-    "id": 138,
-    "category": "雑工事",
-    "item": "戸車交換",
+    "category": "浴室",
+    "item": "浴室床シート貼替",
+    "unit": "m²",
+    "price": 8000,
+    "memo": "",
+    "id": 129
+  },
+  {
+    "category": "洗面所",
+    "item": "洗面台交換（600mm）",
+    "unit": "式",
+    "price": 80000,
+    "memo": "",
+    "id": 130
+  },
+  {
+    "category": "洗面所",
+    "item": "洗面台交換（750mm）",
+    "unit": "式",
+    "price": 100000,
+    "memo": "",
+    "id": 131
+  },
+  {
+    "category": "洗面所",
+    "item": "洗面台交換（900mm）",
+    "unit": "式",
+    "price": 130000,
+    "memo": "",
+    "id": 132
+  },
+  {
+    "category": "洗面所",
+    "item": "洗面台交換（1200mm）",
+    "unit": "式",
+    "price": 180000,
+    "memo": "",
+    "id": 133
+  },
+  {
+    "category": "洗面所",
+    "item": "洗面水栓交換",
     "unit": "箇所",
-    "price": 2000
+    "price": 25000,
+    "memo": "",
+    "id": 134
   },
   {
-    "id": 139,
-    "category": "雑工事",
-    "item": "キッチンシール打ち",
+    "category": "洗面所",
+    "item": "洗面鏡交換（単品）",
+    "unit": "枚",
+    "price": 20000,
+    "memo": "",
+    "id": 135
+  },
+  {
+    "category": "洗面所",
+    "item": "洗面鏡交換（三面鏡）",
     "unit": "式",
-    "price": 3500
+    "price": 50000,
+    "memo": "",
+    "id": 136
+  },
+  {
+    "category": "洗面所",
+    "item": "洗面台下収納交換",
+    "unit": "式",
+    "price": 30000,
+    "memo": "",
+    "id": 137
+  },
+  {
+    "category": "洗面所",
+    "item": "洗濯機パン交換（640）",
+    "unit": "式",
+    "price": 25000,
+    "memo": "",
+    "id": 138
+  },
+  {
+    "category": "洗面所",
+    "item": "洗濯機パン交換（740）",
+    "unit": "式",
+    "price": 28000,
+    "memo": "",
+    "id": 139
+  },
+  {
+    "category": "洗面所",
+    "item": "洗濯機水栓交換",
+    "unit": "箇所",
+    "price": 15000,
+    "memo": "",
+    "id": 140
+  },
+  {
+    "category": "洗面所",
+    "item": "洗面台コーキング打替",
+    "unit": "箇所",
+    "price": 8000,
+    "memo": "",
+    "id": 141
+  },
+  {
+    "category": "トイレ",
+    "item": "便器交換（一般）",
+    "unit": "式",
+    "price": 80000,
+    "memo": "",
+    "id": 142
+  },
+  {
+    "category": "トイレ",
+    "item": "便器交換（節水型）",
+    "unit": "式",
+    "price": 100000,
+    "memo": "",
+    "id": 143
+  },
+  {
+    "category": "トイレ",
+    "item": "タンクレストイレ交換",
+    "unit": "式",
+    "price": 200000,
+    "memo": "",
+    "id": 144
+  },
+  {
+    "category": "トイレ",
+    "item": "タンクレストイレ交換（上位）",
+    "unit": "式",
+    "price": 320000,
+    "memo": "",
+    "id": 145
+  },
+  {
+    "category": "トイレ",
+    "item": "ウォシュレット交換（普及品）",
+    "unit": "台",
+    "price": 35000,
+    "memo": "",
+    "id": 146
+  },
+  {
+    "category": "トイレ",
+    "item": "ウォシュレット交換（中位品）",
+    "unit": "台",
+    "price": 60000,
+    "memo": "",
+    "id": 147
+  },
+  {
+    "category": "トイレ",
+    "item": "ウォシュレット交換（上位品）",
+    "unit": "台",
+    "price": 100000,
+    "memo": "",
+    "id": 148
+  },
+  {
+    "category": "トイレ",
+    "item": "トイレ換気扇交換",
+    "unit": "台",
+    "price": 20000,
+    "memo": "",
+    "id": 149
+  },
+  {
+    "category": "トイレ",
+    "item": "手洗い器設置（カウンター型）",
+    "unit": "式",
+    "price": 80000,
+    "memo": "",
+    "id": 150
+  },
+  {
+    "category": "トイレ",
+    "item": "手洗い器設置（壁付け型）",
+    "unit": "式",
+    "price": 40000,
+    "memo": "",
+    "id": 151
+  },
+  {
+    "category": "トイレ",
+    "item": "トイレ収納棚設置",
+    "unit": "箇所",
+    "price": 20000,
+    "memo": "",
+    "id": 152
+  },
+  {
+    "category": "トイレ",
+    "item": "トイレドア交換",
+    "unit": "式",
+    "price": 55000,
+    "memo": "",
+    "id": 153
+  },
+  {
+    "category": "キッチン",
+    "item": "システムキッチン交換（1800mm）",
+    "unit": "式",
+    "price": 500000,
+    "memo": "",
+    "id": 154
+  },
+  {
+    "category": "キッチン",
+    "item": "システムキッチン交換（2100mm）",
+    "unit": "式",
+    "price": 600000,
+    "memo": "",
+    "id": 155
+  },
+  {
+    "category": "キッチン",
+    "item": "システムキッチン交換（2400mm）",
+    "unit": "式",
+    "price": 700000,
+    "memo": "",
+    "id": 156
+  },
+  {
+    "category": "キッチン",
+    "item": "システムキッチン交換（2700mm）",
+    "unit": "式",
+    "price": 820000,
+    "memo": "",
+    "id": 157
+  },
+  {
+    "category": "キッチン",
+    "item": "レンジフード交換（60cm）",
+    "unit": "台",
+    "price": 60000,
+    "memo": "",
+    "id": 158
+  },
+  {
+    "category": "キッチン",
+    "item": "レンジフード交換（75cm）",
+    "unit": "台",
+    "price": 75000,
+    "memo": "",
+    "id": 159
+  },
+  {
+    "category": "キッチン",
+    "item": "IHクッキングヒーター（2口）",
+    "unit": "台",
+    "price": 60000,
+    "memo": "",
+    "id": 160
+  },
+  {
+    "category": "キッチン",
+    "item": "IHクッキングヒーター（3口）",
+    "unit": "台",
+    "price": 100000,
+    "memo": "",
+    "id": 161
+  },
+  {
+    "category": "キッチン",
+    "item": "ガスコンロ交換（2口）",
+    "unit": "台",
+    "price": 35000,
+    "memo": "",
+    "id": 162
+  },
+  {
+    "category": "キッチン",
+    "item": "ガスコンロ交換（3口）",
+    "unit": "台",
+    "price": 55000,
+    "memo": "",
+    "id": 163
+  },
+  {
+    "category": "キッチン",
+    "item": "キッチン水栓交換（シングル）",
+    "unit": "箇所",
+    "price": 30000,
+    "memo": "",
+    "id": 164
+  },
+  {
+    "category": "キッチン",
+    "item": "キッチン水栓交換（浄水器付）",
+    "unit": "箇所",
+    "price": 60000,
+    "memo": "",
+    "id": 165
+  },
+  {
+    "category": "キッチン",
+    "item": "食器洗浄機設置（ビルトイン）",
+    "unit": "台",
+    "price": 150000,
+    "memo": "",
+    "id": 166
+  },
+  {
+    "category": "キッチン",
+    "item": "食器洗浄機設置（据置型）",
+    "unit": "台",
+    "price": 60000,
+    "memo": "",
+    "id": 167
+  },
+  {
+    "category": "キッチン",
+    "item": "キッチンパネル貼替",
+    "unit": "m²",
+    "price": 8000,
+    "memo": "",
+    "id": 168
+  },
+  {
+    "category": "キッチン",
+    "item": "シンク交換",
+    "unit": "式",
+    "price": 60000,
+    "memo": "",
+    "id": 169
+  },
+  {
+    "category": "キッチン",
+    "item": "キッチンクリーニング",
+    "unit": "式",
+    "price": 25000,
+    "memo": "",
+    "id": 170
+  },
+  {
+    "category": "エアコン",
+    "item": "エアコン設置（6畳用）",
+    "unit": "台",
+    "price": 72000,
+    "memo": "",
+    "id": 171
+  },
+  {
+    "category": "エアコン",
+    "item": "エアコン設置（8畳用）",
+    "unit": "台",
+    "price": 85000,
+    "memo": "",
+    "id": 172
+  },
+  {
+    "category": "エアコン",
+    "item": "エアコン設置（10畳用）",
+    "unit": "台",
+    "price": 95000,
+    "memo": "",
+    "id": 173
+  },
+  {
+    "category": "エアコン",
+    "item": "エアコン設置（14畳用）",
+    "unit": "台",
+    "price": 120000,
+    "memo": "",
+    "id": 174
+  },
+  {
+    "category": "エアコン",
+    "item": "エアコン設置（18畳用）",
+    "unit": "台",
+    "price": 150000,
+    "memo": "",
+    "id": 175
+  },
+  {
+    "category": "エアコン",
+    "item": "エアコン設置（業務用天井埋込）",
+    "unit": "台",
+    "price": 280000,
+    "memo": "",
+    "id": 176
+  },
+  {
+    "category": "エアコン",
+    "item": "エアコン撤去処分（壁掛け）",
+    "unit": "台",
+    "price": 15000,
+    "memo": "",
+    "id": 177
+  },
+  {
+    "category": "エアコン",
+    "item": "エアコン撤去処分（業務用）",
+    "unit": "台",
+    "price": 35000,
+    "memo": "",
+    "id": 178
+  },
+  {
+    "category": "エアコン",
+    "item": "エアコンクリーニング（壁掛け）",
+    "unit": "台",
+    "price": 12000,
+    "memo": "",
+    "id": 179
+  },
+  {
+    "category": "エアコン",
+    "item": "エアコンクリーニング（業務用）",
+    "unit": "台",
+    "price": 25000,
+    "memo": "",
+    "id": 180
+  },
+  {
+    "category": "エアコン",
+    "item": "エアコン移設（同室内）",
+    "unit": "台",
+    "price": 25000,
+    "memo": "",
+    "id": 181
+  },
+  {
+    "category": "エアコン",
+    "item": "エアコン移設（別室・配管延長）",
+    "unit": "台",
+    "price": 45000,
+    "memo": "",
+    "id": 182
+  },
+  {
+    "category": "エアコン",
+    "item": "配管スリーブ穴開け（外壁）",
+    "unit": "箇所",
+    "price": 8000,
+    "memo": "",
+    "id": 183
+  },
+  {
+    "category": "エアコン",
+    "item": "スリーブキャップ取付",
+    "unit": "箇所",
+    "price": 2000,
+    "memo": "",
+    "id": 184
+  },
+  {
+    "category": "エアコン",
+    "item": "隠蔽配管工事",
+    "unit": "式",
+    "price": 80000,
+    "memo": "",
+    "id": 185
+  },
+  {
+    "category": "エアコン",
+    "item": "冷媒配管延長（1m追加）",
+    "unit": "m",
+    "price": 3500,
+    "memo": "",
+    "id": 186
+  },
+  {
+    "category": "給湯器・ガス設備",
+    "item": "給湯器交換（16号・追い焚なし）",
+    "unit": "台",
+    "price": 120000,
+    "memo": "",
+    "id": 187
+  },
+  {
+    "category": "給湯器・ガス設備",
+    "item": "給湯器交換（20号・追い焚なし）",
+    "unit": "台",
+    "price": 140000,
+    "memo": "",
+    "id": 188
+  },
+  {
+    "category": "給湯器・ガス設備",
+    "item": "給湯器交換（24号・追い焚なし）",
+    "unit": "台",
+    "price": 160000,
+    "memo": "",
+    "id": 189
+  },
+  {
+    "category": "給湯器・ガス設備",
+    "item": "給湯器交換（16号・追い焚あり）",
+    "unit": "台",
+    "price": 160000,
+    "memo": "",
+    "id": 190
+  },
+  {
+    "category": "給湯器・ガス設備",
+    "item": "給湯器交換（20号・追い焚あり）",
+    "unit": "台",
+    "price": 185000,
+    "memo": "",
+    "id": 191
+  },
+  {
+    "category": "給湯器・ガス設備",
+    "item": "給湯器交換（24号・追い焚あり）",
+    "unit": "台",
+    "price": 210000,
+    "memo": "",
+    "id": 192
+  },
+  {
+    "category": "給湯器・ガス設備",
+    "item": "給湯器交換（エコジョーズ20号）",
+    "unit": "台",
+    "price": 220000,
+    "memo": "",
+    "id": 193
+  },
+  {
+    "category": "給湯器・ガス設備",
+    "item": "給湯器撤去処分",
+    "unit": "台",
+    "price": 15000,
+    "memo": "",
+    "id": 194
+  },
+  {
+    "category": "給湯器・ガス設備",
+    "item": "電気温水器交換（370L）",
+    "unit": "台",
+    "price": 280000,
+    "memo": "",
+    "id": 195
+  },
+  {
+    "category": "給湯器・ガス設備",
+    "item": "ガスコック交換",
+    "unit": "箇所",
+    "price": 12000,
+    "memo": "",
+    "id": 196
+  },
+  {
+    "category": "給湯器・ガス設備",
+    "item": "ガスコック増設",
+    "unit": "箇所",
+    "price": 18000,
+    "memo": "",
+    "id": 197
+  },
+  {
+    "category": "給湯器・ガス設備",
+    "item": "ガス管延長工事",
+    "unit": "式",
+    "price": 35000,
+    "memo": "",
+    "id": 198
+  },
+  {
+    "category": "給湯器・ガス設備",
+    "item": "ガス管移設工事",
+    "unit": "式",
+    "price": 45000,
+    "memo": "",
+    "id": 199
+  },
+  {
+    "category": "給湯器・ガス設備",
+    "item": "ガス漏れ検知器取付",
+    "unit": "台",
+    "price": 15000,
+    "memo": "",
+    "id": 200
+  },
+  {
+    "category": "給湯器・ガス設備",
+    "item": "給湯器リモコン交換",
+    "unit": "台",
+    "price": 20000,
+    "memo": "",
+    "id": 201
+  },
+  {
+    "category": "電気工事",
+    "item": "照明器具交換（シーリング）",
+    "unit": "箇所",
+    "price": 15000,
+    "memo": "",
+    "id": 202
+  },
+  {
+    "category": "電気工事",
+    "item": "照明器具交換（ダウンライト）",
+    "unit": "箇所",
+    "price": 18000,
+    "memo": "",
+    "id": 203
+  },
+  {
+    "category": "電気工事",
+    "item": "照明器具交換（蛍光灯→LED）",
+    "unit": "箇所",
+    "price": 20000,
+    "memo": "",
+    "id": 204
+  },
+  {
+    "category": "電気工事",
+    "item": "照明器具交換（ブラケット）",
+    "unit": "箇所",
+    "price": 16000,
+    "memo": "",
+    "id": 205
+  },
+  {
+    "category": "電気工事",
+    "item": "照明器具増設（配線含む）",
+    "unit": "箇所",
+    "price": 25000,
+    "memo": "",
+    "id": 206
+  },
+  {
+    "category": "電気工事",
+    "item": "コンセント交換（1口→2口）",
+    "unit": "箇所",
+    "price": 8000,
+    "memo": "",
+    "id": 207
+  },
+  {
+    "category": "電気工事",
+    "item": "コンセント増設（配線含む）",
+    "unit": "箇所",
+    "price": 18000,
+    "memo": "",
+    "id": 208
+  },
+  {
+    "category": "電気工事",
+    "item": "アース付コンセント交換",
+    "unit": "箇所",
+    "price": 12000,
+    "memo": "",
+    "id": 209
+  },
+  {
+    "category": "電気工事",
+    "item": "スイッチ交換（片切）",
+    "unit": "箇所",
+    "price": 8000,
+    "memo": "",
+    "id": 210
+  },
+  {
+    "category": "電気工事",
+    "item": "スイッチ交換（3路・4路）",
+    "unit": "箇所",
+    "price": 12000,
+    "memo": "",
+    "id": 211
+  },
+  {
+    "category": "電気工事",
+    "item": "分電盤交換（10回路）",
+    "unit": "台",
+    "price": 80000,
+    "memo": "",
+    "id": 212
+  },
+  {
+    "category": "電気工事",
+    "item": "分電盤交換（14回路）",
+    "unit": "台",
+    "price": 95000,
+    "memo": "",
+    "id": 213
+  },
+  {
+    "category": "電気工事",
+    "item": "分電盤交換（20回路）",
+    "unit": "台",
+    "price": 120000,
+    "memo": "",
+    "id": 214
+  },
+  {
+    "category": "電気工事",
+    "item": "ブレーカー増設（1回路）",
+    "unit": "箇所",
+    "price": 15000,
+    "memo": "",
+    "id": 215
+  },
+  {
+    "category": "電気工事",
+    "item": "テレビアンテナ設置（地デジ）",
+    "unit": "式",
+    "price": 65000,
+    "memo": "",
+    "id": 216
+  },
+  {
+    "category": "電気工事",
+    "item": "テレビアンテナ撤去",
+    "unit": "式",
+    "price": 20000,
+    "memo": "",
+    "id": 217
+  },
+  {
+    "category": "電気工事",
+    "item": "テレビ端子交換・増設",
+    "unit": "箇所",
+    "price": 12000,
+    "memo": "",
+    "id": 218
+  },
+  {
+    "category": "電気工事",
+    "item": "インターホン交換（映像なし）",
+    "unit": "台",
+    "price": 25000,
+    "memo": "",
+    "id": 219
+  },
+  {
+    "category": "電気工事",
+    "item": "インターホン交換（モニター付）",
+    "unit": "台",
+    "price": 45000,
+    "memo": "",
+    "id": 220
+  },
+  {
+    "category": "電気工事",
+    "item": "火災報知器設置（単独型）",
+    "unit": "台",
+    "price": 8000,
+    "memo": "",
+    "id": 221
+  },
+  {
+    "category": "電気工事",
+    "item": "火災報知器設置（連動型）",
+    "unit": "台",
+    "price": 15000,
+    "memo": "",
+    "id": 222
+  },
+  {
+    "category": "電気工事",
+    "item": "配線工事（CD管露出）",
+    "unit": "m",
+    "price": 2500,
+    "memo": "",
+    "id": 223
+  },
+  {
+    "category": "電気工事",
+    "item": "配線工事（CD管隠蔽）",
+    "unit": "m",
+    "price": 5000,
+    "memo": "",
+    "id": 224
+  },
+  {
+    "category": "電気工事",
+    "item": "電力引込工事（単相3線）",
+    "unit": "式",
+    "price": 80000,
+    "memo": "",
+    "id": 225
+  },
+  {
+    "category": "換気設備",
+    "item": "換気扇交換（トイレ用）",
+    "unit": "台",
+    "price": 18000,
+    "memo": "",
+    "id": 226
+  },
+  {
+    "category": "換気設備",
+    "item": "換気扇交換（洗面所用）",
+    "unit": "台",
+    "price": 18000,
+    "memo": "",
+    "id": 227
+  },
+  {
+    "category": "換気設備",
+    "item": "換気扇交換（居室用）",
+    "unit": "台",
+    "price": 20000,
+    "memo": "",
+    "id": 228
+  },
+  {
+    "category": "換気設備",
+    "item": "換気扇交換（大型・キッチン用）",
+    "unit": "台",
+    "price": 25000,
+    "memo": "",
+    "id": 229
+  },
+  {
+    "category": "換気設備",
+    "item": "24時間換気設置（第1種）",
+    "unit": "台",
+    "price": 120000,
+    "memo": "",
+    "id": 230
+  },
+  {
+    "category": "換気設備",
+    "item": "24時間換気設置（第3種）",
+    "unit": "台",
+    "price": 60000,
+    "memo": "",
+    "id": 231
+  },
+  {
+    "category": "換気設備",
+    "item": "24時間換気フィルター交換",
+    "unit": "式",
+    "price": 8000,
+    "memo": "",
+    "id": 232
+  },
+  {
+    "category": "換気設備",
+    "item": "レンジフード交換（90cm幅）",
+    "unit": "台",
+    "price": 95000,
+    "memo": "",
+    "id": 233
+  },
+  {
+    "category": "換気設備",
+    "item": "レンジフードクリーニング",
+    "unit": "台",
+    "price": 15000,
+    "memo": "",
+    "id": 234
+  },
+  {
+    "category": "換気設備",
+    "item": "換気ダクト清掃",
+    "unit": "箇所",
+    "price": 12000,
+    "memo": "",
+    "id": 235
+  },
+  {
+    "category": "換気設備",
+    "item": "換気ダクト交換（アルミフレキ）",
+    "unit": "m",
+    "price": 3500,
+    "memo": "",
+    "id": 236
+  },
+  {
+    "category": "換気設備",
+    "item": "換気ガラリ・フード交換",
+    "unit": "箇所",
+    "price": 8000,
+    "memo": "",
+    "id": 237
+  },
+  {
+    "category": "換気設備",
+    "item": "同時給排換気扇設置",
+    "unit": "台",
+    "price": 35000,
+    "memo": "",
+    "id": 238
+  },
+  {
+    "category": "解体撤去",
+    "item": "間仕切り壁撤去",
+    "unit": "m²",
+    "price": 8000,
+    "memo": "",
+    "id": 239
+  },
+  {
+    "category": "解体撤去",
+    "item": "フローリング撤去",
+    "unit": "m²",
+    "price": 1500,
+    "memo": "",
+    "id": 240
+  },
+  {
+    "category": "解体撤去",
+    "item": "カーペット撤去",
+    "unit": "m²",
+    "price": 800,
+    "memo": "",
+    "id": 241
+  },
+  {
+    "category": "解体撤去",
+    "item": "クッションフロア撤去",
+    "unit": "m²",
+    "price": 700,
+    "memo": "",
+    "id": 242
+  },
+  {
+    "category": "解体撤去",
+    "item": "畳撤去・処分",
+    "unit": "枚",
+    "price": 1500,
+    "memo": "",
+    "id": 243
+  },
+  {
+    "category": "解体撤去",
+    "item": "天井ボード撤去",
+    "unit": "m²",
+    "price": 1200,
+    "memo": "",
+    "id": 244
+  },
+  {
+    "category": "解体撤去",
+    "item": "ユニットバス解体",
+    "unit": "式",
+    "price": 80000,
+    "memo": "",
+    "id": 245
+  },
+  {
+    "category": "解体撤去",
+    "item": "システムキッチン解体",
+    "unit": "式",
+    "price": 50000,
+    "memo": "",
+    "id": 246
+  },
+  {
+    "category": "解体撤去",
+    "item": "洗面台解体撤去",
+    "unit": "台",
+    "price": 15000,
+    "memo": "",
+    "id": 247
+  },
+  {
+    "category": "解体撤去",
+    "item": "トイレ便器撤去",
+    "unit": "台",
+    "price": 12000,
+    "memo": "",
+    "id": 248
+  },
+  {
+    "category": "解体撤去",
+    "item": "建具枠撤去",
+    "unit": "箇所",
+    "price": 8000,
+    "memo": "",
+    "id": 249
+  },
+  {
+    "category": "解体撤去",
+    "item": "廃材処分費",
+    "unit": "m³",
+    "price": 20000,
+    "memo": "",
+    "id": 250
+  },
+  {
+    "category": "解体撤去",
+    "item": "産廃処分費（混載）",
+    "unit": "式",
+    "price": 45000,
+    "memo": "",
+    "id": 251
+  },
+  {
+    "category": "解体撤去",
+    "item": "残置物撤去・処分",
+    "unit": "式",
+    "price": 30000,
+    "memo": "",
+    "id": 252
+  },
+  {
+    "category": "解体撤去",
+    "item": "エコカラット撤去",
+    "unit": "m²",
+    "price": 3000,
+    "memo": "",
+    "id": 253
+  },
+  {
+    "category": "大工木工事",
+    "item": "間仕切り壁新設（LGS+PB）",
+    "unit": "m²",
+    "price": 12000,
+    "memo": "",
+    "id": 254
+  },
+  {
+    "category": "大工木工事",
+    "item": "間仕切り壁新設（木下地+PB）",
+    "unit": "m²",
+    "price": 14000,
+    "memo": "",
+    "id": 255
+  },
+  {
+    "category": "大工木工事",
+    "item": "天井下地補修",
+    "unit": "m²",
+    "price": 4000,
+    "memo": "",
+    "id": 256
+  },
+  {
+    "category": "大工木工事",
+    "item": "天井PBボード貼替",
+    "unit": "m²",
+    "price": 3500,
+    "memo": "",
+    "id": 257
+  },
+  {
+    "category": "大工木工事",
+    "item": "床下地補修",
+    "unit": "m²",
+    "price": 5000,
+    "memo": "",
+    "id": 258
+  },
+  {
+    "category": "大工木工事",
+    "item": "根太補修・交換",
+    "unit": "m",
+    "price": 3500,
+    "memo": "",
+    "id": 259
+  },
+  {
+    "category": "大工木工事",
+    "item": "巾木交換",
+    "unit": "m",
+    "price": 1500,
+    "memo": "",
+    "id": 260
+  },
+  {
+    "category": "大工木工事",
+    "item": "廻縁交換",
+    "unit": "m",
+    "price": 1200,
+    "memo": "",
+    "id": 261
+  },
+  {
+    "category": "大工木工事",
+    "item": "棚板設置（既製品）",
+    "unit": "枚",
+    "price": 8000,
+    "memo": "",
+    "id": 262
+  },
+  {
+    "category": "大工木工事",
+    "item": "造作棚設置",
+    "unit": "箇所",
+    "price": 25000,
+    "memo": "",
+    "id": 263
+  },
+  {
+    "category": "大工木工事",
+    "item": "押入れ内部改修",
+    "unit": "箇所",
+    "price": 30000,
+    "memo": "",
+    "id": 264
+  },
+  {
+    "category": "大工木工事",
+    "item": "クローゼット造作",
+    "unit": "箇所",
+    "price": 60000,
+    "memo": "",
+    "id": 265
+  },
+  {
+    "category": "大工木工事",
+    "item": "壁PBボード補修・貼替",
+    "unit": "m²",
+    "price": 4500,
+    "memo": "",
+    "id": 266
+  },
+  {
+    "category": "大工木工事",
+    "item": "敷居補修・交換",
+    "unit": "箇所",
+    "price": 8000,
+    "memo": "",
+    "id": 267
+  },
+  {
+    "category": "大工木工事",
+    "item": "鴨居補修・交換",
+    "unit": "箇所",
+    "price": 8000,
+    "memo": "",
+    "id": 268
+  },
+  {
+    "category": "大工木工事",
+    "item": "手すり取付（壁付）",
+    "unit": "m",
+    "price": 12000,
+    "memo": "",
+    "id": 269
+  },
+  {
+    "category": "大工木工事",
+    "item": "床束補修・調整",
+    "unit": "箇所",
+    "price": 5000,
+    "memo": "",
+    "id": 270
+  },
+  {
+    "category": "クリーニング美装",
+    "item": "ハウスクリーニング（1K）",
+    "unit": "式",
+    "price": 35000,
+    "memo": "",
+    "id": 271
+  },
+  {
+    "category": "クリーニング美装",
+    "item": "ハウスクリーニング（1LDK）",
+    "unit": "式",
+    "price": 50000,
+    "memo": "",
+    "id": 272
+  },
+  {
+    "category": "クリーニング美装",
+    "item": "ハウスクリーニング（2LDK）",
+    "unit": "式",
+    "price": 65000,
+    "memo": "",
+    "id": 273
+  },
+  {
+    "category": "クリーニング美装",
+    "item": "ハウスクリーニング（3LDK）",
+    "unit": "式",
+    "price": 80000,
+    "memo": "",
+    "id": 274
+  },
+  {
+    "category": "クリーニング美装",
+    "item": "浴室クリーニング",
+    "unit": "式",
+    "price": 20000,
+    "memo": "",
+    "id": 275
+  },
+  {
+    "category": "クリーニング美装",
+    "item": "キッチンクリーニング（単品）",
+    "unit": "式",
+    "price": 15000,
+    "memo": "",
+    "id": 276
+  },
+  {
+    "category": "クリーニング美装",
+    "item": "トイレクリーニング",
+    "unit": "式",
+    "price": 10000,
+    "memo": "",
+    "id": 277
+  },
+  {
+    "category": "クリーニング美装",
+    "item": "窓ガラス清掃（片面）",
+    "unit": "m²",
+    "price": 800,
+    "memo": "",
+    "id": 278
+  },
+  {
+    "category": "クリーニング美装",
+    "item": "外壁高圧洗浄",
+    "unit": "m²",
+    "price": 300,
+    "memo": "",
+    "id": 279
+  },
+  {
+    "category": "クリーニング美装",
+    "item": "除菌・消臭処理",
+    "unit": "式",
+    "price": 20000,
+    "memo": "",
+    "id": 280
+  },
+  {
+    "category": "クリーニング美装",
+    "item": "カビ除去処理",
+    "unit": "m²",
+    "price": 3000,
+    "memo": "",
+    "id": 281
+  },
+  {
+    "category": "クリーニング美装",
+    "item": "床ワックス仕上げ",
+    "unit": "m²",
+    "price": 500,
+    "memo": "",
+    "id": 282
+  },
+  {
+    "category": "雑工事その他",
+    "item": "養生費（床・壁）",
+    "unit": "m²",
+    "price": 400,
+    "memo": "",
+    "id": 283
+  },
+  {
+    "category": "雑工事その他",
+    "item": "養生費（階段・共用部）",
+    "unit": "式",
+    "price": 15000,
+    "memo": "",
+    "id": 284
+  },
+  {
+    "category": "雑工事その他",
+    "item": "諸経費（小規模工事）",
+    "unit": "式",
+    "price": 20000,
+    "memo": "",
+    "id": 285
+  },
+  {
+    "category": "雑工事その他",
+    "item": "鍵交換（ディンプルキー）",
+    "unit": "箇所",
+    "price": 25000,
+    "memo": "",
+    "id": 286
+  },
+  {
+    "category": "雑工事その他",
+    "item": "郵便受け交換",
+    "unit": "箇所",
+    "price": 12000,
+    "memo": "",
+    "id": 287
+  },
+  {
+    "category": "雑工事その他",
+    "item": "表札交換",
+    "unit": "箇所",
+    "price": 5000,
+    "memo": "",
+    "id": 288
+  },
+  {
+    "category": "雑工事その他",
+    "item": "室内物干し取付",
+    "unit": "箇所",
+    "price": 8000,
+    "memo": "",
+    "id": 289
+  },
+  {
+    "category": "雑工事その他",
+    "item": "タオルバー交換",
+    "unit": "箇所",
+    "price": 6000,
+    "memo": "",
+    "id": 290
+  },
+  {
+    "category": "雑工事その他",
+    "item": "ペーパーホルダー交換",
+    "unit": "箇所",
+    "price": 5000,
+    "memo": "",
+    "id": 291
+  },
+  {
+    "category": "雑工事その他",
+    "item": "消火器設置・交換",
+    "unit": "本",
+    "price": 8000,
+    "memo": "",
+    "id": 292
+  },
+  {
+    "category": "雑工事その他",
+    "item": "宅配ボックス設置",
+    "unit": "台",
+    "price": 80000,
+    "memo": "",
+    "id": 293
+  },
+  {
+    "category": "雑工事その他",
+    "item": "ポスト投函口補修",
+    "unit": "箇所",
+    "price": 8000,
+    "memo": "",
+    "id": 294
   }
 ]
