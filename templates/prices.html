@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>単価マスタ管理</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header>
+    <h1>単価マスタ管理</h1>
+    <nav><a href="/">精査ツール</a><span class="nav-current">単価マスタ管理</span><a href="/contractors">業者管理</a></nav>
+  </header>
+
+  <main>
+    <!-- 追加フォーム -->
+    <section class="form-section">
+      <h2>単価を追加</h2>
+      <div class="form-row">
+        <input type="text" id="newCategory" placeholder="カテゴリ（例: クロス）" list="categoryList">
+        <datalist id="categoryList">
+          {% for c in categories %}<option value="{{ c }}">{% endfor %}
+        </datalist>
+        <input type="text" id="newItem" placeholder="工事項目名（例: クロス貼替）">
+        <input type="number" id="newPrice" placeholder="単価（円）" min="1">
+        <input type="text" id="newUnit" placeholder="単位（例: m²）">
+      </div>
+      <div class="form-row" style="margin-top:8px;">
+        <input type="text" id="newMemo" placeholder="備考・適用条件（任意）　例: 既存撤去込み、1部屋6帖以上の場合" style="flex:1;min-width:200px;">
+        <button class="btn-primary" onclick="addPrice()">追加</button>
+      </div>
+    </section>
+
+    <!-- Excelインポート -->
+    <section class="form-section">
+      <h2>Excelから一括インポート</h2>
+      <p class="hint">列順: A=カテゴリ / B=工事項目名 / C=単位 / D=単価（円）　※1行目はヘッダー行</p>
+      <div class="form-row">
+        <input type="file" id="importFile" accept=".xlsx,.xls">
+        <button class="btn-secondary" onclick="importPrices()">インポート</button>
+      </div>
+      <p id="importMsg" class="msg hidden"></p>
+    </section>
+
+    <!-- 業者見積書から取り込み -->
+    <section class="form-section">
+      <h2>業者見積書から単価を取り込む</h2>
+      <p class="hint">見積書（.xlsx / .xls / .pdf）をアップロードすると、AIが単価を抽出してマスタと照合します</p>
+      <div class="form-row">
+        <input type="file" id="estimateFile" accept=".xlsx,.xls,.pdf">
+        <button class="btn-secondary" id="extractBtn" onclick="extractFromEstimate()">単価を抽出・照合</button>
+      </div>
+      <div id="estimateMatchSection" class="hidden" style="margin-top:16px;"></div>
+    </section>
+
+    <!-- 一覧 -->
+    <section>
+      <h2 style="font-size:15px;font-weight:700;margin-bottom:12px;">登録済み単価一覧</h2>
+
+      <!-- カテゴリタブ -->
+      <div class="tab-row">
+        <button class="tab-btn active" data-tab="" onclick="setTab('')">すべて <span class="tab-count">{{ prices|length }}</span></button>
+        {% for c in categories %}
+        <button class="tab-btn" data-tab="{{ c }}" onclick="setTab('{{ c }}')">{{ c }} <span class="tab-count">{{ category_counts[c] }}</span></button>
+        {% endfor %}
+      </div>
+
+      <!-- 検索 + エクスポート -->
+      <div class="search-bar-row">
+        <span id="filterStatus" class="filter-status">全 {{ prices|length }}件</span>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div class="search-wrap">
+            <input type="text" id="searchInput" class="search-input" placeholder="工事項目名・備考で絞り込み…" oninput="filterTable()">
+            <button class="btn-clear-search hidden" id="clearBtn" onclick="clearSearch()">×</button>
+          </div>
+          <button class="btn-secondary" id="exportBtn" onclick="exportCSV()">エクスポート ({{ prices|length }}件)</button>
+        </div>
+      </div>
+
+      <table id="priceTable">
+        <thead>
+          <tr>
+            <th>カテゴリ</th>
+            <th>工事項目名</th>
+            <th>単価（円）</th>
+            <th>単位</th>
+            <th class="memo-th">備考</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody id="priceBody">
+          {% for p in prices %}
+          <tr id="row-{{ p.id }}" data-id="{{ p.id }}">
+            <td class="edit-cell" data-field="category">{{ p.category }}</td>
+            <td class="edit-cell" data-field="item">{{ p.item }}</td>
+            <td class="edit-cell price-cell" data-field="price">{{ "{:,}".format(p.price) }}</td>
+            <td class="edit-cell" data-field="unit">{{ p.unit }}</td>
+            <td class="edit-cell memo-cell" data-field="memo" title="{{ p.memo or '' }}">{{ p.memo or '' }}</td>
+            <td class="action-cell">
+              <button class="btn-edit" onclick="startEdit({{ p.id }})">編集</button>
+              <button class="btn-delete" onclick="deletePrice({{ p.id }})">削除</button>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% if not prices %}
+      <p class="empty">まだ登録されていません。</p>
+      {% endif %}
+    </section>
+  </main>
+
+  <script>
+    let activeTab = '';
+
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+    }
+
+    // ===== タブ =====
+    function setTab(category) {
+      activeTab = category;
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.tab === category);
+      });
+      filterTable();
+    }
+
+    // ===== フィルター =====
+    function filterTable() {
+      const q = document.getElementById('searchInput').value.trim().toLowerCase();
+      const rows = document.querySelectorAll('#priceBody tr');
+      let visible = 0;
+      rows.forEach(row => {
+        const category = row.querySelector('[data-field="category"]')?.textContent.trim() || '';
+        const item = row.querySelector('[data-field="item"]')?.textContent.toLowerCase() || '';
+        const memo = row.querySelector('[data-field="memo"]')?.textContent.toLowerCase() || '';
+        const tabMatch = !activeTab || category === activeTab;
+        const searchMatch = !q || item.includes(q) || memo.includes(q);
+        const show = tabMatch && searchMatch;
+        row.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      document.getElementById('clearBtn').classList.toggle('hidden', !q);
+
+      let status = '';
+      if (activeTab && q) status = `${activeTab} ／ "${q}" → ${visible}件`;
+      else if (activeTab) status = `${activeTab} → ${visible}件`;
+      else if (q) status = `"${q}" → ${visible}件`;
+      else status = `全 ${visible}件`;
+      document.getElementById('filterStatus').textContent = status;
+
+      const label = activeTab ? `「${activeTab}」をエクスポート` : (q ? '絞り込み結果をエクスポート' : 'エクスポート');
+      document.getElementById('exportBtn').textContent = `${label} (${visible}件)`;
+    }
+
+    function clearSearch() {
+      document.getElementById('searchInput').value = '';
+      filterTable();
+      document.getElementById('searchInput').focus();
+    }
+
+    // ===== エクスポート =====
+    function exportCSV() {
+      const rows = document.querySelectorAll('#priceBody tr');
+      const lines = [['カテゴリ', '工事項目名', '単価（円）', '単位', '備考'].join(',')];
+      rows.forEach(row => {
+        if (row.style.display === 'none') return;
+        const fields = ['category', 'item', 'price', 'unit', 'memo'];
+        const values = fields.map(field => {
+          const cell = row.querySelector(`[data-field="${field}"]`);
+          if (!cell) return '';
+          let val = field === 'price'
+            ? cell.textContent.replace(/,/g, '').trim()
+            : cell.textContent.trim();
+          if (val.includes(',') || val.includes('"') || val.includes('\n')) {
+            val = '"' + val.replace(/"/g, '""') + '"';
+          }
+          return val;
+        });
+        lines.push(values.join(','));
+      });
+
+      const bom = '﻿';
+      const blob = new Blob([bom + lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      const d = new Date();
+      const date = `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
+      a.download = `単価マスタ_${date}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // ===== 単価 CRUD =====
+    async function addPrice() {
+      const category = document.getElementById('newCategory').value.trim();
+      const item = document.getElementById('newItem').value.trim();
+      const price = parseInt(document.getElementById('newPrice').value);
+      const unit = document.getElementById('newUnit').value.trim() || '式';
+      const memo = document.getElementById('newMemo').value.trim();
+
+      if (!category || !item || !price) {
+        alert('カテゴリ・工事項目名・単価は必須です。');
+        return;
+      }
+
+      const res = await fetch('/api/prices', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ category, item, price, unit, memo })
+      });
+      const p = await res.json();
+
+      const tbody = document.getElementById('priceBody');
+      const tr = document.createElement('tr');
+      tr.id = `row-${p.id}`;
+      tr.dataset.id = p.id;
+      tr.innerHTML = rowHtml(p);
+      tbody.appendChild(tr);
+      filterTable();
+      ['newCategory','newItem','newPrice','newUnit','newMemo'].forEach(id => document.getElementById(id).value = '');
+    }
+
+    function rowHtml(p) {
+      return `
+        <td class="edit-cell" data-field="category">${escapeHtml(p.category)}</td>
+        <td class="edit-cell" data-field="item">${escapeHtml(p.item)}</td>
+        <td class="edit-cell price-cell" data-field="price">${Number(p.price).toLocaleString()}</td>
+        <td class="edit-cell" data-field="unit">${escapeHtml(p.unit)}</td>
+        <td class="edit-cell memo-cell" data-field="memo" title="${escapeHtml(p.memo||'')}">${escapeHtml(p.memo||'')}</td>
+        <td class="action-cell">
+          <button class="btn-edit" onclick="startEdit(${p.id})">編集</button>
+          <button class="btn-delete" onclick="deletePrice(${p.id})">削除</button>
+        </td>`;
+    }
+
+    function startEdit(id) {
+      const row = document.getElementById(`row-${id}`);
+      const cells = row.querySelectorAll('.edit-cell');
+      cells.forEach(cell => {
+        const field = cell.dataset.field;
+        const val = field === 'price' ? cell.textContent.replace(/,/g, '') : cell.textContent;
+        cell.innerHTML = `<input type="${field === 'price' ? 'number' : 'text'}" value="${escapeHtml(val)}" data-field="${field}">`;
+      });
+      const actionCell = row.querySelector('.action-cell');
+      actionCell.innerHTML = `
+        <button class="btn-primary" onclick="saveEdit(${id})">保存</button>
+        <button class="btn-ghost" onclick="cancelEdit(${id})">キャンセル</button>`;
+    }
+
+    async function saveEdit(id) {
+      const row = document.getElementById(`row-${id}`);
+      const inputs = row.querySelectorAll('input');
+      const data = {};
+      inputs.forEach(inp => { data[inp.dataset.field] = inp.value; });
+
+      const res = await fetch(`/api/prices/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      const p = await res.json();
+      row.innerHTML = rowHtml(p);
+    }
+
+    function cancelEdit(id) {
+      location.reload();
+    }
+
+    async function deletePrice(id) {
+      if (!confirm('この単価を削除しますか？')) return;
+      await fetch(`/api/prices/${id}`, { method: 'DELETE' });
+      document.getElementById(`row-${id}`).remove();
+      filterTable();
+    }
+
+    // ===== 業者見積書から取り込み =====
+    async function extractFromEstimate() {
+      const file = document.getElementById('estimateFile').files[0];
+      if (!file) { alert('ファイルを選択してください。'); return; }
+
+      const section = document.getElementById('estimateMatchSection');
+      const btn = document.getElementById('extractBtn');
+      btn.disabled = true;
+      section.className = '';
+      section.innerHTML = '<div class="loading" style="padding:24px;"><div class="spinner"></div><p>単価を抽出中… 通常10〜20秒かかります</p></div>';
+
+      try {
+        const formData = new FormData();
+        formData.append('file', file);
+        const res1 = await fetch('/api/prices/extract-from-estimate', { method: 'POST', body: formData });
+        const data1 = await res1.json();
+        if (!res1.ok) throw new Error(data1.error || '抽出に失敗しました');
+
+        const estimatePrices = data1.estimate_prices || [];
+        if (estimatePrices.length === 0) {
+          section.innerHTML = '<p style="color:var(--orange);font-size:13px;">単価が明記された項目が見つかりませんでした。</p>';
+          btn.disabled = false;
+          return;
+        }
+
+        section.innerHTML = '<div class="loading" style="padding:16px;"><div class="spinner"></div><p>マスタと照合中…</p></div>';
+
+        const res2 = await fetch('/api/prices/match', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ estimate_prices: estimatePrices })
+        });
+        const data2 = await res2.json();
+        if (!res2.ok) throw new Error(data2.error || '照合に失敗しました');
+
+        renderMatchTable(data2.matches || [], section);
+      } catch (e) {
+        section.innerHTML = `<div class="error-box">エラー: ${escapeHtml(e.message)}</div>`;
+      }
+      btn.disabled = false;
+    }
+
+    function renderMatchTable(matches, container) {
+      const actionable = matches.filter(m => m.action !== 'skip');
+      const updateCount = matches.filter(m => m.action === 'update').length;
+      const addCount = matches.filter(m => m.action === 'add').length;
+      const skipCount = matches.filter(m => m.action === 'skip').length;
+
+      let html = `<p style="font-size:13px;color:var(--gray-600);margin-bottom:10px;">
+        ${matches.length}件検出 — 更新候補: ${updateCount}件 / 新規追加候補: ${addCount}件 / スキップ: ${skipCount}件
+      </p>`;
+
+      if (actionable.length === 0) {
+        container.innerHTML = html + '<p class="empty">取り込み候補がありませんでした（全件マスタより高い単価のためスキップ）。</p>';
+        return;
+      }
+
+      html += `<table class="match-table">
+        <thead><tr>
+          <th>見積項目名</th><th>見積単価</th><th>カテゴリ</th>
+          <th>マスタ項目名</th><th>現在単価</th><th>判定</th>
+          <th><input type="checkbox" id="checkAll" onchange="toggleAllMatches(this)" checked> 全選択</th>
+        </tr></thead>
+        <tbody>`;
+
+      actionable.forEach((m, i) => {
+        const badge = m.action === 'update'
+          ? '<span class="action-badge badge-update">更新候補</span>'
+          : '<span class="action-badge badge-add">新規追加</span>';
+        const masterItem = m.master_item ? escapeHtml(m.master_item) : '<span style="color:var(--gray-600)">—</span>';
+        const currentPrice = m.current_price != null ? Number(m.current_price).toLocaleString() + '円' : '<span style="color:var(--gray-600)">—</span>';
+        html += `<tr>
+          <td>${escapeHtml(m.estimate_item)}</td>
+          <td class="price-cell">${Number(m.estimate_price).toLocaleString()}円/${escapeHtml(m.unit)}</td>
+          <td>${escapeHtml(m.category)}</td>
+          <td>${masterItem}</td>
+          <td class="price-cell">${currentPrice}</td>
+          <td>${badge}</td>
+          <td style="text-align:center;"><input type="checkbox" class="match-check" data-index="${i}" checked></td>
+        </tr>`;
+      });
+
+      html += `</tbody></table>
+        <div style="margin-top:12px;">
+          <button class="btn-primary" style="font-size:13px;padding:8px 20px;" onclick="applySelectedPrices()">選択した項目を取り込む</button>
+        </div>`;
+
+      container.innerHTML = html;
+      window._matchData = actionable;
+    }
+
+    function toggleAllMatches(cb) {
+      document.querySelectorAll('.match-check').forEach(c => c.checked = cb.checked);
+    }
+
+    async function applySelectedPrices() {
+      const checks = document.querySelectorAll('.match-check');
+      const selected = [];
+      checks.forEach(c => {
+        if (c.checked) selected.push(window._matchData[parseInt(c.dataset.index)]);
+      });
+      if (selected.length === 0) { alert('取り込む項目を選択してください。'); return; }
+
+      const res = await fetch('/api/prices/bulk-apply', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items: selected })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        alert(`${data.updated}件更新・${data.added}件追加しました。`);
+        location.reload();
+      } else {
+        alert('取り込みに失敗しました: ' + (data.error || '不明なエラー'));
+      }
+    }
+
+    // ===== Excelインポート =====
+    async function importPrices() {
+      const file = document.getElementById('importFile').files[0];
+      if (!file) { alert('ファイルを選択してください。'); return; }
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const res = await fetch('/api/prices/import', { method: 'POST', body: formData });
+      if (res.ok) location.reload();
+    }
+  </script>
+</body>
+</html>

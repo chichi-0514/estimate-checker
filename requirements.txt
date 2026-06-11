@@ -1,0 +1,9 @@
+flask
+flask-sqlalchemy
+psycopg2-binary
+anthropic
+openpyxl
+pdfplumber
+Pillow
+python-dotenv
+pymupdf

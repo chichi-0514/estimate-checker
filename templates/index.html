@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>原状回復 見積精査ツール</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header>
+    <h1>原状回復 見積精査ツール</h1>
+    <nav><span class="nav-current">精査ツール</span><a href="/prices">単価マスタ管理</a><a href="/contractors">業者管理</a></nav>
+  </header>
+
+  <main>
+    <section class="upload-section">
+      <div class="upload-area" id="estimateArea">
+        <div class="upload-icon">📄</div>
+        <p class="upload-label">見積書をドロップ</p>
+        <p class="upload-sub">Excel (.xlsx / .xls) または PDF</p>
+        <input type="file" id="estimateInput" multiple accept=".xlsx,.xls,.pdf" hidden>
+        <button class="btn-secondary" onclick="document.getElementById('estimateInput').click()">ファイルを選択</button>
+        <ul id="estimateList" class="file-list"></ul>
+      </div>
+
+      <div class="upload-area" id="photoArea">
+        <div class="upload-icon">📷</div>
+        <p class="upload-label">現場写真をドロップ</p>
+        <p class="upload-sub">JPG / PNG（複数可・任意）</p>
+        <input type="file" id="photoInput" multiple accept="image/*" hidden>
+        <button class="btn-secondary" onclick="document.getElementById('photoInput').click()">写真を選択</button>
+        <ul id="photoList" class="file-list"></ul>
+      </div>
+
+      <div class="upload-area" id="siteDocArea">
+        <div class="upload-icon">📋</div>
+        <p class="upload-label">現場資料をドロップ</p>
+        <p class="upload-sub">室内状況報告書・間取り図など（PDF / JPG・任意）</p>
+        <input type="file" id="siteDocInput" multiple accept=".pdf,image/*" hidden>
+        <button class="btn-secondary" onclick="document.getElementById('siteDocInput').click()">資料を選択</button>
+        <ul id="siteDocList" class="file-list"></ul>
+      </div>
+    </section>
+
+    <div class="action-bar">
+      <button class="btn-primary" id="analyzeBtn" onclick="analyze()">精査開始</button>
+      <button class="btn-ghost" onclick="resetAll()">リセット</button>
+    </div>
+
+    <div id="loading" class="loading hidden">
+      <div class="spinner"></div>
+      <p>精査中です。通常10〜30秒かかります…</p>
+    </div>
+
+    <section id="result" class="result hidden"></section>
+  </main>
+
+  <script>
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+    }
+
+    const estimateFiles = [];
+    const photoFiles = [];
+    const siteDocFiles = [];
+
+    function setupDropZone(areaId, inputId, files, listId) {
+      const area = document.getElementById(areaId);
+      const input = document.getElementById(inputId);
+
+      area.addEventListener('dragover', e => { e.preventDefault(); area.classList.add('drag-over'); });
+      area.addEventListener('dragleave', () => area.classList.remove('drag-over'));
+      area.addEventListener('drop', e => {
+        e.preventDefault();
+        area.classList.remove('drag-over');
+        addFiles(e.dataTransfer.files, files, listId);
+      });
+      input.addEventListener('change', () => addFiles(input.files, files, listId));
+    }
+
+    function addFiles(newFiles, arr, listId) {
+      Array.from(newFiles).forEach(f => {
+        if (!arr.find(x => x.name === f.name && x.size === f.size)) {
+          arr.push(f);
+        }
+      });
+      renderList(arr, listId);
+    }
+
+    function renderList(arr, listId) {
+      const ul = document.getElementById(listId);
+      ul.innerHTML = arr.map((f, i) => `
+        <li>
+          <span class="file-name">${f.name}</span>
+          <span class="file-size">${(f.size / 1024).toFixed(0)} KB</span>
+          <button class="btn-remove" onclick="removeFile(${i}, '${listId}')">×</button>
+        </li>`).join('');
+    }
+
+    function removeFile(idx, listId) {
+      if (listId === 'estimateList') estimateFiles.splice(idx, 1), renderList(estimateFiles, 'estimateList');
+      else if (listId === 'photoList') photoFiles.splice(idx, 1), renderList(photoFiles, 'photoList');
+      else siteDocFiles.splice(idx, 1), renderList(siteDocFiles, 'siteDocList');
+    }
+
+    function resetAll() {
+      estimateFiles.length = 0;
+      photoFiles.length = 0;
+      siteDocFiles.length = 0;
+      renderList(estimateFiles, 'estimateList');
+      renderList(photoFiles, 'photoList');
+      renderList(siteDocFiles, 'siteDocList');
+      document.getElementById('result').classList.add('hidden');
+      document.getElementById('result').innerHTML = '';
+    }
+
+    async function analyze() {
+      if (estimateFiles.length === 0) {
+        alert('見積書ファイルをアップロードしてください。');
+        return;
+      }
+
+      const formData = new FormData();
+      estimateFiles.forEach(f => formData.append('estimates', f));
+      photoFiles.forEach(f => formData.append('photos', f));
+      siteDocFiles.forEach(f => formData.append('site_docs', f));
+
+      document.getElementById('loading').classList.remove('hidden');
+      document.getElementById('result').classList.add('hidden');
+      document.getElementById('analyzeBtn').disabled = true;
+
+      try {
+        const res = await fetch('/analyze', { method: 'POST', body: formData });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || '不明なエラー');
+        renderResult(data);
+      } catch (e) {
+        document.getElementById('result').innerHTML = `<div class="error-box">エラー: ${escapeHtml(e.message)}<br><button class="btn-secondary" style="margin-top:10px;font-size:13px;" onclick="analyze()">再試行</button></div>`;
+        document.getElementById('result').classList.remove('hidden');
+      } finally {
+        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('analyzeBtn').disabled = false;
+      }
+    }
+
+    function renderResult(data) {
+      window._lastResult = data;
+      const missing = data.missing_items || [];
+      const over = data.overpriced_items || [];
+      const ok = data.ok_items || [];
+
+      let html = `<h2>精査結果</h2>`;
+
+      if (data.summary) {
+        html += `<div class="summary-box">${escapeHtml(data.summary).replace(/\n/g, '<br>')}</div>`;
+      }
+
+      // 不備・見落とし
+      html += `<div class="result-section section-red">
+        <h3>不備・見落とし（${missing.length}件）</h3>`;
+      if (missing.length === 0) {
+        html += '<p class="empty">指摘事項なし</p>';
+      } else {
+        html += missing.map(m => `
+          <div class="result-item">
+            <span class="badge badge-category">${escapeHtml(m.category || '')}</span>
+            <span class="item-name">${escapeHtml(m.item)}</span>
+            <span class="item-reason">${escapeHtml(m.reason || '')}</span>
+            ${m.action ? `<span class="item-action">→ ${escapeHtml(m.action)}</span>` : ''}
+          </div>`).join('');
+      }
+      html += `</div>`;
+
+      // 割高項目
+      html += `<div class="result-section section-orange">
+        <h3>割高な項目（${over.length}件）<span class="section-hint">→ 下の訂正依頼メールに自動で反映されます</span></h3>`;
+      if (over.length === 0) {
+        html += '<p class="empty">指摘事項なし</p>';
+      } else {
+        html += over.map(o => `
+          <div class="result-item">
+            <span class="item-name">${escapeHtml(o.item)}</span>
+            <span class="price-detail">
+              見積: <strong>${Number(o.estimate_price).toLocaleString()}円/${escapeHtml(o.unit)}</strong>
+              → 基準: ${Number(o.reference_price).toLocaleString()}円
+              <span class="diff-badge">+${Number(o.diff_rate)}%</span>
+              ${o.source ? `<span class="source-badge ${o.source === '相場比' ? 'source-market' : 'source-master'}">${escapeHtml(o.source)}</span>` : ''}
+            </span>
+          </div>`).join('');
+      }
+      html += `</div>`;
+
+      // 問題なし
+      html += `<div class="result-section section-green">
+        <h3>問題なし（${ok.length}件）</h3>`;
+      if (ok.length === 0) {
+        html += '<p class="empty">—</p>';
+      } else {
+        html += `<div class="ok-grid">${ok.map(o => `<span class="ok-chip">${escapeHtml(o.item)}</span>`).join('')}</div>`;
+      }
+      html += `</div>`;
+
+      // 訂正依頼メール作成セクション
+      html += `<div class="result-section section-mail" id="emailSection">
+        <h3>訂正依頼メール作成</h3>
+        <div class="email-form-row">
+          <input type="text" id="emailCompany" list="contractorList" placeholder="業者会社名（例：株式会社ヒロ・コーポレーション）" class="email-input-wide">
+          <datalist id="contractorList"></datalist>
+          <input type="text" id="emailContact" placeholder="担当者名（例：小野）" class="email-input-short">
+          <input type="text" id="emailSender" placeholder="送信者名（例：三木）" class="email-input-short">
+          <button class="btn-secondary" onclick="generateEmail()">メールを生成</button>
+        </div>
+        <div id="emailOutputArea" class="hidden" style="margin-top:12px;">
+          <textarea id="emailOutput" class="email-textarea" readonly></textarea>
+          <button class="btn-ghost" onclick="copyEmail()" style="margin-top:8px;font-size:13px;">コピー</button>
+          <span id="copyMsg" style="margin-left:10px;font-size:12px;color:var(--green);"></span>
+        </div>
+      </div>`;
+
+      // 単価取り込みセクション（折りたたみ、デフォルト閉じ）
+      if (data.estimate_prices && data.estimate_prices.length > 0) {
+        window._estimatePrices = data.estimate_prices;
+        html += `<div class="result-section section-blue" id="priceImportSection">
+          <div class="collapsible-header" onclick="togglePriceImport()">
+            <h3>単価の取り込み（${data.estimate_prices.length}件検出）</h3>
+            <span id="priceImportToggle" class="toggle-icon">▶ 展開する</span>
+          </div>
+          <div id="priceImportBody" class="hidden" style="margin-top:12px;">
+            <p style="font-size:13px;color:var(--gray-600);margin-bottom:12px;">
+              この見積書から単価を抽出しました。社内マスタと照合して最安値を更新できます。
+            </p>
+            <button class="btn-secondary" onclick="matchPrices()">マスタと照合する</button>
+            <div id="matchResult" style="margin-top:16px;"></div>
+          </div>
+        </div>`;
+      } else {
+        window._estimatePrices = null;
+      }
+
+      const resultEl = document.getElementById('result');
+      resultEl.innerHTML = html;
+      resultEl.classList.remove('hidden');
+      resultEl.scrollIntoView({ behavior: 'smooth' });
+
+      populateContractorList();
+      if (data.contractor_name) {
+        const inp = document.getElementById('emailCompany');
+        if (inp) inp.value = data.contractor_name;
+      }
+    }
+
+    function populateContractorList() {
+      const dl = document.getElementById('contractorList');
+      if (!dl || !window._contractors) return;
+      dl.innerHTML = '';
+      window._contractors.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.name;
+        dl.appendChild(opt);
+      });
+    }
+
+    function togglePriceImport() {
+      const body = document.getElementById('priceImportBody');
+      const icon = document.getElementById('priceImportToggle');
+      if (body.classList.contains('hidden')) {
+        body.classList.remove('hidden');
+        icon.textContent = '▲ 閉じる';
+      } else {
+        body.classList.add('hidden');
+        icon.textContent = '▶ 展開する';
+      }
+    }
+
+    async function generateEmail() {
+      const company = document.getElementById('emailCompany').value.trim();
+      const contact = document.getElementById('emailContact').value.trim();
+      const sender = document.getElementById('emailSender').value.trim();
+      if (!company || !contact || !sender) {
+        alert('会社名・担当者名・送信者名をすべて入力してください。');
+        return;
+      }
+
+      const btn = document.querySelector('#emailSection .btn-secondary');
+      btn.disabled = true;
+      btn.textContent = '生成中…';
+      document.getElementById('emailOutputArea').classList.add('hidden');
+      document.getElementById('copyMsg').textContent = '';
+
+      try {
+        const res = await fetch('/generate-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            company_name: company,
+            contact_name: contact,
+            sender_name: sender,
+            missing_items: window._lastResult?.missing_items || [],
+            overpriced_items: window._lastResult?.overpriced_items || []
+          })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || '不明なエラー');
+        document.getElementById('emailOutput').value = data.email;
+        document.getElementById('emailOutputArea').classList.remove('hidden');
+      } catch (e) {
+        alert(`エラー: ${e.message}`);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'メールを生成';
+      }
+    }
+
+    function copyEmail() {
+      const ta = document.getElementById('emailOutput');
+      navigator.clipboard.writeText(ta.value).then(() => {
+        const msg = document.getElementById('copyMsg');
+        msg.textContent = 'コピーしました';
+        setTimeout(() => { msg.textContent = ''; }, 2000);
+      });
+    }
+
+    async function matchPrices() {
+      if (!window._estimatePrices) return;
+      const btn = document.querySelector('#priceImportSection .btn-secondary');
+      btn.disabled = true;
+      btn.textContent = '照合中…';
+
+      const matchDiv = document.getElementById('matchResult');
+      matchDiv.innerHTML = '<div class="spinner" style="width:24px;height:24px;margin:8px auto;"></div>';
+
+      try {
+        const res = await fetch('/api/prices/match', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ estimate_prices: window._estimatePrices })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || '不明なエラー');
+
+        const candidates = (data.matches || []).filter(m => m.action !== 'skip');
+        if (candidates.length === 0) {
+          matchDiv.innerHTML = '<p style="color:var(--gray-600);font-size:13px;">取り込み候補はありません（すべてマスタ以上の単価です）。</p>';
+          btn.textContent = '照合済み';
+          return;
+        }
+
+        window._matchCandidates = candidates;
+        let tableHtml = `<table class="match-table">
+          <thead><tr>
+            <th style="width:32px;"></th>
+            <th>見積書の項目名</th>
+            <th>見積単価</th>
+            <th>マスタ項目名</th>
+            <th>現在単価</th>
+            <th>判定</th>
+          </tr></thead><tbody>`;
+        candidates.forEach((m, i) => {
+          const badge = m.action === 'update'
+            ? '<span class="action-badge badge-update">更新候補</span>'
+            : '<span class="action-badge badge-add">新規追加</span>';
+          const masterItem = m.master_item || '（未登録）';
+          const currentPrice = m.current_price != null ? Number(m.current_price).toLocaleString() + '円' : '—';
+          tableHtml += `<tr>
+            <td><input type="checkbox" class="match-check" data-idx="${i}" checked></td>
+            <td>${m.estimate_item}</td>
+            <td class="price-cell"><strong>${Number(m.estimate_price).toLocaleString()}円/${m.unit}</strong></td>
+            <td style="color:var(--gray-600)">${masterItem}</td>
+            <td class="price-cell" style="color:var(--gray-600)">${currentPrice}</td>
+            <td>${badge}</td>
+          </tr>`;
+        });
+        tableHtml += `</tbody></table>`;
+        tableHtml += `<div style="margin-top:12px;">
+          <button class="btn-primary" onclick="applyPrices()" style="font-size:13px;padding:8px 20px;">
+            選択した件を取り込む
+          </button>
+          <span id="applyMsg" style="margin-left:12px;font-size:13px;color:var(--green);"></span>
+        </div>`;
+        matchDiv.innerHTML = tableHtml;
+        btn.textContent = '再照合する';
+        btn.disabled = false;
+      } catch (e) {
+        matchDiv.innerHTML = `<p style="color:var(--red);font-size:13px;">エラー: ${e.message}</p>`;
+        btn.textContent = 'マスタと照合する';
+        btn.disabled = false;
+      }
+    }
+
+    async function applyPrices() {
+      const checks = document.querySelectorAll('.match-check:checked');
+      const selected = Array.from(checks).map(cb => window._matchCandidates[parseInt(cb.dataset.idx)]);
+      if (selected.length === 0) { alert('取り込む項目を選択してください。'); return; }
+
+      const items = selected.map(m => ({
+        action: m.action,
+        master_id: m.master_id,
+        estimate_item: m.estimate_item,
+        estimate_price: m.estimate_price,
+        category: m.category,
+        unit: m.unit
+      }));
+
+      try {
+        const res = await fetch('/api/prices/bulk-apply', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ items })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || '不明なエラー');
+        document.getElementById('applyMsg').textContent =
+          `${data.updated}件更新・${data.added}件追加しました`;
+      } catch (e) {
+        document.getElementById('applyMsg').style.color = 'var(--red)';
+        document.getElementById('applyMsg').textContent = `エラー: ${e.message}`;
+      }
+    }
+
+    setupDropZone('estimateArea', 'estimateInput', estimateFiles, 'estimateList');
+    setupDropZone('photoArea', 'photoInput', photoFiles, 'photoList');
+    setupDropZone('siteDocArea', 'siteDocInput', siteDocFiles, 'siteDocList');
+
+    window._contractors = [];
+    fetch('/api/contractors').then(r => r.json()).then(data => { window._contractors = data; }).catch(() => {});
+  </script>
+</body>
+</html>

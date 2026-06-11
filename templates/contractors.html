@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>業者管理</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header>
+    <h1>業者管理</h1>
+    <nav>
+      <a href="/">精査ツール</a>
+      <a href="/prices">単価マスタ管理</a>
+      <span class="nav-current">業者管理</span>
+    </nav>
+  </header>
+
+  <main>
+    <!-- 追加フォーム -->
+    <section class="form-section">
+      <h2>業者を追加</h2>
+      <div class="form-row">
+        <input type="text" id="newName" placeholder="会社名（例: 株式会社○○工務店）" style="flex:2;min-width:200px;">
+        <input type="text" id="newCategories" placeholder="対応カテゴリ（例: クロス, 床, 建具）" style="flex:2;min-width:160px;">
+      </div>
+      <div class="form-row" style="margin-top:8px;">
+        <select id="newRating" style="border:1px solid var(--gray-200);border-radius:var(--radius);padding:8px 12px;font-size:14px;outline:none;">
+          <option value="0">評価なし</option>
+          <option value="1">★☆☆☆☆</option>
+          <option value="2">★★☆☆☆</option>
+          <option value="3">★★★☆☆</option>
+          <option value="4">★★★★☆</option>
+          <option value="5">★★★★★</option>
+        </select>
+        <input type="text" id="newMemo" placeholder="メモ（例: 品質安定、対応速い）" style="flex:1;min-width:160px;">
+        <button class="btn-primary" onclick="addContractor()">追加</button>
+      </div>
+      <p id="addMsg" class="msg hidden"></p>
+    </section>
+
+    <!-- 検索バー -->
+    <div class="search-bar-row">
+      <span id="filterStatus" class="filter-status">全 {{ contractors|length }}件</span>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div class="search-wrap">
+          <input type="text" id="searchInput" class="search-input" placeholder="会社名・カテゴリ・メモで絞り込み…" oninput="filterTable()">
+          <button class="btn-clear-search hidden" id="clearBtn" onclick="clearSearch()">×</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 業者一覧テーブル -->
+    <table id="contractorTable">
+      <thead>
+        <tr>
+          <th>会社名</th>
+          <th>対応カテゴリ</th>
+          <th style="text-align:center;white-space:nowrap;">見積件数</th>
+          <th style="white-space:nowrap;">最終見積日</th>
+          <th style="text-align:center;">評価</th>
+          <th class="memo-th">メモ</th>
+          <th style="white-space:nowrap;">操作</th>
+        </tr>
+      </thead>
+      <tbody id="contractorBody">
+        {% for c in contractors %}
+        <tr id="row-{{ c.id }}" data-id="{{ c.id }}">
+          <td class="edit-cell" data-field="name">{{ c.name }}</td>
+          <td class="edit-cell" data-field="categories">{{ c.categories | join(', ') }}</td>
+          <td style="text-align:center;" class="estimate-count-cell">{{ c.estimate_count }}</td>
+          <td class="last-date-cell" style="white-space:nowrap;">{{ c.last_estimate_date or '—' }}</td>
+          <td style="text-align:center;" class="edit-cell" data-field="rating">
+            <span class="star-rating">{{ '★' * c.rating }}{{ '☆' * (5 - c.rating) }}</span>
+          </td>
+          <td class="edit-cell memo-cell" data-field="memo" title="{{ c.memo or '' }}">{{ c.memo or '' }}</td>
+          <td class="action-cell">
+            <button class="btn-edit" onclick="startEdit({{ c.id }})">編集</button>
+            <button class="btn-delete" onclick="deleteContractor({{ c.id }})">削除</button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% if not contractors %}
+    <p class="empty" style="margin-top:16px;">業者が登録されていません。見積書をアップロードすると自動登録されます。</p>
+    {% endif %}
+  </main>
+
+  <script>
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+    }
+
+    function renderStars(rating) {
+      const r = parseInt(rating) || 0;
+      return `<span class="star-rating">${'★'.repeat(r)}${'☆'.repeat(5 - r)}</span>`;
+    }
+
+    function rowHtml(c) {
+      const cats = Array.isArray(c.categories) ? c.categories.join(', ') : (c.categories || '');
+      const date = c.last_estimate_date || '—';
+      const rating = parseInt(c.rating) || 0;
+      return `
+        <td class="edit-cell" data-field="name">${escapeHtml(c.name)}</td>
+        <td class="edit-cell" data-field="categories">${escapeHtml(cats)}</td>
+        <td style="text-align:center;" class="estimate-count-cell">${c.estimate_count}</td>
+        <td class="last-date-cell" style="white-space:nowrap;">${escapeHtml(date)}</td>
+        <td style="text-align:center;" class="edit-cell" data-field="rating">${renderStars(rating)}</td>
+        <td class="edit-cell memo-cell" data-field="memo" title="${escapeHtml(c.memo || '')}">${escapeHtml(c.memo || '')}</td>
+        <td class="action-cell">
+          <button class="btn-edit" onclick="startEdit(${c.id})">編集</button>
+          <button class="btn-delete" onclick="deleteContractor(${c.id})">削除</button>
+        </td>`;
+    }
+
+    async function addContractor() {
+      const name = document.getElementById('newName').value.trim();
+      if (!name) { alert('会社名を入力してください。'); return; }
+      const res = await fetch('/api/contractors', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          name,
+          categories: document.getElementById('newCategories').value.trim(),
+          rating: document.getElementById('newRating').value,
+          memo: document.getElementById('newMemo').value.trim()
+        })
+      });
+      const c = await res.json();
+      if (c.error) { alert(c.error); return; }
+
+      const tbody = document.getElementById('contractorBody');
+      const tr = document.createElement('tr');
+      tr.id = `row-${c.id}`;
+      tr.dataset.id = c.id;
+      tr.innerHTML = rowHtml(c);
+      tbody.appendChild(tr);
+
+      filterTable();
+      ['newName','newCategories','newMemo'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('newRating').value = '0';
+
+      const msg = document.getElementById('addMsg');
+      msg.textContent = `「${c.name}」を追加しました`;
+      msg.classList.remove('hidden');
+      setTimeout(() => msg.classList.add('hidden'), 3000);
+    }
+
+    function startEdit(id) {
+      const row = document.getElementById(`row-${id}`);
+      const cells = row.querySelectorAll('.edit-cell');
+      cells.forEach(cell => {
+        const field = cell.dataset.field;
+        let val = '';
+        if (field === 'rating') {
+          val = (cell.textContent.match(/★/g) || []).length;
+          const sel = document.createElement('select');
+          sel.dataset.field = field;
+          sel.style.cssText = 'border:1px solid var(--blue);border-radius:4px;padding:3px 6px;font-size:13px;';
+          [['0','評価なし'],['1','★'],['2','★★'],['3','★★★'],['4','★★★★'],['5','★★★★★']].forEach(([v,t]) => {
+            const opt = document.createElement('option');
+            opt.value = v; opt.textContent = t;
+            if (parseInt(v) === parseInt(val)) opt.selected = true;
+            sel.appendChild(opt);
+          });
+          cell.innerHTML = '';
+          cell.appendChild(sel);
+        } else {
+          val = cell.textContent.trim();
+          cell.innerHTML = `<input type="text" value="${escapeHtml(val)}" data-field="${field}" style="width:100%;min-width:80px;">`;
+        }
+      });
+      row.querySelector('.action-cell').innerHTML = `
+        <button class="btn-primary" onclick="saveEdit(${id})">保存</button>
+        <button class="btn-ghost" onclick="cancelEdit(${id})">キャンセル</button>`;
+    }
+
+    function cancelEdit(id) { location.reload(); }
+
+    async function saveEdit(id) {
+      const row = document.getElementById(`row-${id}`);
+      const data = {};
+      row.querySelectorAll('.edit-cell input').forEach(inp => { data[inp.dataset.field] = inp.value; });
+      const sel = row.querySelector('.edit-cell select');
+      if (sel) data[sel.dataset.field] = sel.value;
+
+      const res = await fetch(`/api/contractors/${id}`, {
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+      });
+      const c = await res.json();
+      if (c.error) { alert(c.error); return; }
+      row.innerHTML = rowHtml(c);
+    }
+
+    async function deleteContractor(id) {
+      const row = document.getElementById(`row-${id}`);
+      const name = row.querySelector('[data-field="name"]')?.textContent || '';
+      if (!confirm(`「${name}」を削除しますか？`)) return;
+      await fetch(`/api/contractors/${id}`, {method: 'DELETE'});
+      row.remove();
+      filterTable();
+    }
+
+    function filterTable() {
+      const q = document.getElementById('searchInput').value.trim().toLowerCase();
+      const rows = document.querySelectorAll('#contractorBody tr');
+      let visible = 0;
+      rows.forEach(row => {
+        const name = row.querySelector('[data-field="name"]')?.textContent.toLowerCase() || '';
+        const cats = row.querySelector('[data-field="categories"]')?.textContent.toLowerCase() || '';
+        const memo = row.querySelector('[data-field="memo"]')?.textContent.toLowerCase() || '';
+        const show = !q || name.includes(q) || cats.includes(q) || memo.includes(q);
+        row.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      document.getElementById('clearBtn').classList.toggle('hidden', !q);
+      document.getElementById('filterStatus').textContent = q ? `"${q}" → ${visible}件` : `全 ${visible}件`;
+    }
+
+    function clearSearch() {
+      document.getElementById('searchInput').value = '';
+      filterTable();
+      document.getElementById('searchInput').focus();
+    }
+  </script>
+</body>
+</html>
