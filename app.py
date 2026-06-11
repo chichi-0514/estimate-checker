@@ -923,6 +923,23 @@ def health():
     return jsonify({"status": "ok"})
 
 
+@app.route("/api/admin/reload-prices", methods=["POST"])
+def admin_reload_prices():
+    if not PRICES_FILE.exists():
+        return jsonify({"error": "prices.json not found"}), 500
+    with open(PRICES_FILE, encoding="utf-8") as f:
+        items = json.load(f)
+    Price.query.delete()
+    db.session.commit()
+    for p in items:
+        db.session.add(Price(
+            id=p["id"], category=p["category"], item=p["item"],
+            unit=p.get("unit", "式"), price=p["price"], memo=p.get("memo", "")
+        ))
+    db.session.commit()
+    return jsonify({"status": "ok", "count": len(items)})
+
+
 @app.route("/history")
 def history_page():
     histories = AnalysisHistory.query.order_by(AnalysisHistory.id.desc()).limit(100).all()
