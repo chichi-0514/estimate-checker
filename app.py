@@ -5,7 +5,7 @@ import io
 import re
 import datetime
 from pathlib import Path
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, Response
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
 import anthropic
@@ -76,6 +76,29 @@ class Contractor(db.Model):
         }
 
 
+class AnalysisHistory(db.Model):
+    __tablename__ = "analysis_history"
+    id               = db.Column(db.Integer, primary_key=True)
+    analyzed_at      = db.Column(db.String(30), nullable=False)
+    contractor_name  = db.Column(db.String(200), default="")
+    file_names       = db.Column(db.String(500), default="")
+    missing_count    = db.Column(db.Integer, default=0)
+    overpriced_count = db.Column(db.Integer, default=0)
+    summary          = db.Column(db.Text, default="")
+    result_json      = db.Column(db.Text, default="")
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "analyzed_at": self.analyzed_at,
+            "contractor_name": self.contractor_name or "",
+            "file_names": self.file_names or "",
+            "missing_count": self.missing_count,
+            "overpriced_count": self.overpriced_count,
+            "summary": self.summary or ""
+        }
+
+
 with app.app_context():
     db.create_all()
     # テーブルが空の場合のみ既存JSONデータを移行
@@ -104,6 +127,20 @@ with app.app_context():
                     memo=c.get("memo", "")
                 ))
         db.session.commit()
+
+
+@app.before_request
+def check_auth():
+    username = os.environ.get("APP_USERNAME")
+    password = os.environ.get("APP_PASSWORD")
+    if not username or not password:
+        return
+    auth = request.authorization
+    if not auth or auth.username != username or auth.password != password:
+        return Response(
+            "認証が必要です", 401,
+            {"WWW-Authenticate": 'Basic realm="Estimate Checker"'}
+        )
 
 
 SAMPLE_EMAILS = """
@@ -522,6 +559,18 @@ def analyze():
         cats = list({p["category"] for p in result.get("estimate_prices", []) if p.get("category")})
         auto_register_contractor(contractor_name, cats)
 
+    history = AnalysisHistory(
+        analyzed_at=datetime.datetime.now().isoformat(timespec='seconds'),
+        contractor_name=contractor_name or "",
+        file_names=", ".join(f.filename for f in estimate_files if f.filename),
+        missing_count=len(result.get("missing_items", [])),
+        overpriced_count=len(result.get("overpriced_items", [])),
+        summary=result.get("summary", ""),
+        result_json=json.dumps(result, ensure_ascii=False)
+    )
+    db.session.add(history)
+    db.session.commit()
+
     return jsonify(result)
 
 
@@ -869,12 +918,94 @@ def import_prices():
     return jsonify({"added": added})
 
 
+@app.route("/history")
+def history_page():
+    histories = AnalysisHistory.query.order_by(AnalysisHistory.id.desc()).limit(100).all()
+    return render_template("history.html", histories=histories)
+
+
+@app.route("/api/monday/status", methods=["GET"])
+def monday_status():
+    enabled = bool(os.environ.get("MONDAY_API_TOKEN") and os.environ.get("MONDAY_BOARD_ID"))
+    return jsonify({"enabled": enabled})
+
+
+@app.route("/api/monday/create-item", methods=["POST"])
+def monday_create_item():
+    import urllib.request as urlreq
+    token = os.environ.get("MONDAY_API_TOKEN")
+    board_id = os.environ.get("MONDAY_BOARD_ID")
+    if not token or not board_id:
+        return jsonify({"error": "MONDAY_API_TOKEN または MONDAY_BOARD_ID が設定されていません。"}), 400
+
+    data = request.get_json()
+    contractor = data.get("contractor_name") or "不明"
+    file_names = data.get("file_names", "")
+    missing_count = data.get("missing_count", 0)
+    overpriced_count = data.get("overpriced_count", 0)
+    summary = data.get("summary", "")
+    analyzed_at = data.get("analyzed_at", datetime.date.today().isoformat())
+
+    item_name = f"{contractor} ({str(analyzed_at)[:10]})"
+    create_payload = json.dumps({
+        "query": f"mutation {{ create_item (board_id: {board_id}, item_name: {json.dumps(item_name)}) {{ id }} }}"
+    }).encode("utf-8")
+
+    req = urlreq.Request(
+        "https://api.monday.com/v2",
+        data=create_payload,
+        headers={"Authorization": token, "Content-Type": "application/json"}
+    )
+    try:
+        with urlreq.urlopen(req, timeout=10) as resp:
+            api_result = json.loads(resp.read())
+    except Exception as e:
+        return jsonify({"error": f"Monday.com API エラー: {e}"}), 500
+
+    item_id = api_result.get("data", {}).get("create_item", {}).get("id")
+    if not item_id:
+        errors = api_result.get("errors", [])
+        return jsonify({"error": f"アイテム作成に失敗しました: {errors}"}), 500
+
+    detail = f"ファイル: {file_names}\n不備・見落とし: {missing_count}件\n割高項目: {overpriced_count}件\n\n{summary}"
+    update_payload = json.dumps({
+        "query": f"mutation {{ create_update (item_id: {item_id}, body: {json.dumps(detail)}) {{ id }} }}"
+    }).encode("utf-8")
+    update_req = urlreq.Request(
+        "https://api.monday.com/v2",
+        data=update_payload,
+        headers={"Authorization": token, "Content-Type": "application/json"}
+    )
+    try:
+        with urlreq.urlopen(update_req, timeout=10):
+            pass
+    except Exception:
+        pass
+
+    return jsonify({"ok": True, "item_id": item_id})
+
+
 # --- 業者マスタ API ---
 
 @app.route("/contractors")
 def contractors_page():
     contractors = [c.to_dict() for c in Contractor.query.order_by(Contractor.id).all()]
-    return render_template("contractors.html", contractors=contractors)
+    from sqlalchemy import func
+    stats_rows = db.session.query(
+        AnalysisHistory.contractor_name,
+        func.count(AnalysisHistory.id).label("count"),
+        func.avg(AnalysisHistory.missing_count).label("avg_missing"),
+        func.avg(AnalysisHistory.overpriced_count).label("avg_overpriced")
+    ).group_by(AnalysisHistory.contractor_name).all()
+    stats_map = {
+        row.contractor_name: {
+            "count": row.count,
+            "avg_missing": round(row.avg_missing, 1) if row.avg_missing else 0,
+            "avg_overpriced": round(row.avg_overpriced, 1) if row.avg_overpriced else 0
+        }
+        for row in stats_rows
+    }
+    return render_template("contractors.html", contractors=contractors, stats_map=stats_map)
 
 
 @app.route("/api/contractors", methods=["GET"])
@@ -929,4 +1060,4 @@ def delete_contractor(contractor_id):
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", debug=True, port=8080)
+    app.run(host="0.0.0.0", debug=os.environ.get("FLASK_DEBUG", "false").lower() == "true", port=8080)

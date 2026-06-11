@@ -9,12 +9,13 @@
 <body>
   <header>
     <h1>原状回復 見積精査ツール</h1>
-    <nav><span class="nav-current">精査ツール</span><a href="/prices">単価マスタ管理</a><a href="/contractors">業者管理</a></nav>
+    <nav><span class="nav-current">精査ツール</span><a href="/prices">単価マスタ管理</a><a href="/contractors">業者管理</a><a href="/history">精査履歴</a></nav>
   </header>
 
   <main>
     <section class="upload-section">
       <div class="upload-area" id="estimateArea">
+        <span class="upload-badge badge-required">必須</span>
         <div class="upload-icon">📄</div>
         <p class="upload-label">見積書をドロップ</p>
         <p class="upload-sub">Excel (.xlsx / .xls) または PDF</p>
@@ -24,6 +25,7 @@
       </div>
 
       <div class="upload-area" id="photoArea">
+        <span class="upload-badge badge-optional">任意</span>
         <div class="upload-icon">📷</div>
         <p class="upload-label">現場写真をドロップ</p>
         <p class="upload-sub">JPG / PNG（複数可・任意）</p>
@@ -33,6 +35,7 @@
       </div>
 
       <div class="upload-area" id="siteDocArea">
+        <span class="upload-badge badge-optional">任意</span>
         <div class="upload-icon">📋</div>
         <p class="upload-label">現場資料をドロップ</p>
         <p class="upload-sub">室内状況報告書・間取り図など（PDF / JPG・任意）</p>
@@ -43,7 +46,7 @@
     </section>
 
     <div class="action-bar">
-      <button class="btn-primary" id="analyzeBtn" onclick="analyze()">精査開始</button>
+      <button class="btn-primary" id="analyzeBtn" onclick="analyze()" disabled>精査開始</button>
       <button class="btn-ghost" onclick="resetAll()">リセット</button>
     </div>
 
@@ -85,6 +88,7 @@
         }
       });
       renderList(arr, listId);
+      updateAnalyzeBtn();
     }
 
     function renderList(arr, listId) {
@@ -101,6 +105,11 @@
       if (listId === 'estimateList') estimateFiles.splice(idx, 1), renderList(estimateFiles, 'estimateList');
       else if (listId === 'photoList') photoFiles.splice(idx, 1), renderList(photoFiles, 'photoList');
       else siteDocFiles.splice(idx, 1), renderList(siteDocFiles, 'siteDocList');
+      updateAnalyzeBtn();
+    }
+
+    function updateAnalyzeBtn() {
+      document.getElementById('analyzeBtn').disabled = estimateFiles.length === 0;
     }
 
     function resetAll() {
@@ -112,6 +121,7 @@
       renderList(siteDocFiles, 'siteDocList');
       document.getElementById('result').classList.add('hidden');
       document.getElementById('result').innerHTML = '';
+      updateAnalyzeBtn();
     }
 
     async function analyze() {
@@ -119,6 +129,8 @@
         alert('見積書ファイルをアップロードしてください。');
         return;
       }
+
+      window._estimateFileNames = estimateFiles.map(f => f.name).join(', ');
 
       const formData = new FormData();
       estimateFiles.forEach(f => formData.append('estimates', f));
@@ -150,6 +162,12 @@
       const ok = data.ok_items || [];
 
       let html = `<h2>精査結果</h2>`;
+
+      if (window._mondayEnabled) {
+        html += `<div style="display:flex;justify-content:flex-end;margin-bottom:8px;">
+          <button class="btn-secondary" id="mondayBtn" onclick="registerMonday()">Monday.comに登録</button>
+        </div>`;
+      }
 
       if (data.summary) {
         html += `<div class="summary-box">${escapeHtml(data.summary).replace(/\n/g, '<br>')}</div>`;
@@ -417,12 +435,44 @@
       }
     }
 
+    async function registerMonday() {
+      const btn = document.getElementById('mondayBtn');
+      btn.disabled = true;
+      btn.textContent = '登録中…';
+      const payload = {
+        contractor_name: window._lastResult?.contractor_name || '',
+        file_names: window._estimateFileNames || '',
+        missing_count: (window._lastResult?.missing_items || []).length,
+        overpriced_count: (window._lastResult?.overpriced_items || []).length,
+        summary: window._lastResult?.summary || '',
+        analyzed_at: new Date().toISOString().slice(0, 10)
+      };
+      try {
+        const res = await fetch('/api/monday/create-item', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(payload)
+        });
+        const json = await res.json();
+        if (!res.ok) throw new Error(json.error || '不明なエラー');
+        btn.textContent = '登録済み';
+        btn.style.cssText = 'color:var(--green);border-color:var(--green);';
+      } catch (e) {
+        alert(`Monday.comへの登録に失敗しました:\n${e.message}`);
+        btn.disabled = false;
+        btn.textContent = 'Monday.comに登録';
+      }
+    }
+
     setupDropZone('estimateArea', 'estimateInput', estimateFiles, 'estimateList');
     setupDropZone('photoArea', 'photoInput', photoFiles, 'photoList');
     setupDropZone('siteDocArea', 'siteDocInput', siteDocFiles, 'siteDocList');
 
     window._contractors = [];
     fetch('/api/contractors').then(r => r.json()).then(data => { window._contractors = data; }).catch(() => {});
+
+    window._mondayEnabled = false;
+    fetch('/api/monday/status').then(r => r.json()).then(d => { window._mondayEnabled = d.enabled; }).catch(() => {});
   </script>
 </body>
 </html>

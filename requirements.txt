@@ -7,3 +7,4 @@ pdfplumber
 Pillow
 python-dotenv
 pymupdf
+gunicorn

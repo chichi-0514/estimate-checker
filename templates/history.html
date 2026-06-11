@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>精査履歴 - 原状回復 見積精査ツール</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header>
+    <h1>原状回復 見積精査ツール</h1>
+    <nav>
+      <a href="/">精査ツール</a>
+      <a href="/prices">単価マスタ管理</a>
+      <a href="/contractors">業者管理</a>
+      <span class="nav-current">精査履歴</span>
+    </nav>
+  </header>
+
+  <main>
+    <div class="form-section">
+      <div class="search-bar-row">
+        <h2>精査履歴（直近100件）</h2>
+        <span class="filter-status">{{ histories|length }}件</span>
+      </div>
+
+      {% if histories %}
+      <div style="overflow-x: auto;">
+        <table>
+          <thead>
+            <tr>
+              <th style="white-space:nowrap;">日時</th>
+              <th>業者名</th>
+              <th>ファイル</th>
+              <th style="text-align:right;white-space:nowrap;">不備</th>
+              <th style="text-align:right;white-space:nowrap;">割高</th>
+              <th>総評</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for h in histories %}
+            <tr>
+              <td style="white-space:nowrap;font-variant-numeric:tabular-nums;">{{ h.analyzed_at[:16] | replace('T', ' ') }}</td>
+              <td>{{ h.contractor_name or '—' }}</td>
+              <td style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="{{ h.file_names }}">{{ h.file_names or '—' }}</td>
+              <td style="text-align:right;">
+                {% if h.missing_count > 0 %}<span style="color:var(--red);font-weight:600;">{{ h.missing_count }}件</span>{% else %}0件{% endif %}
+              </td>
+              <td style="text-align:right;">
+                {% if h.overpriced_count > 0 %}<span style="color:var(--orange);font-weight:600;">{{ h.overpriced_count }}件</span>{% else %}0件{% endif %}
+              </td>
+              <td style="max-width:320px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--gray-600);font-size:12px;" title="{{ h.summary }}">{{ h.summary or '—' }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <p class="empty" style="padding:32px 0;text-align:center;">まだ精査履歴がありません。見積書をアップロードして精査を実行すると、ここに記録されます。</p>
+      {% endif %}
+    </div>
+  </main>
+</body>
+</html>

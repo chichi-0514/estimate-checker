@@ -550,3 +550,40 @@ header nav { display: flex; gap: 16px; align-items: center; }
 
 /* Star rating */
 .star-rating { color: #f6ad55; letter-spacing: 1px; font-size: 14px; }
+
+/* Upload area badges */
+.upload-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+}
+.badge-required { background: #fed7d7; color: var(--red); }
+.badge-optional { background: var(--gray-200); color: var(--gray-600); }
+
+/* Mobile improvements */
+@media (max-width: 640px) {
+  .action-bar {
+    flex-direction: column;
+  }
+  .action-bar button {
+    width: 100%;
+  }
+  .result-section {
+    overflow-x: auto;
+  }
+  table {
+    min-width: 480px;
+  }
+  .email-form-row {
+    flex-direction: column;
+  }
+  .email-input-wide,
+  .email-input-short {
+    width: 100%;
+    min-width: unset;
+  }
+}
